@@ -1,0 +1,125 @@
+.admin-container {
+    min-height: 100vh;
+    background-color: #f4f7f6;
+    padding: 40px 20px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #333;
+}
+
+.admin-card {
+    background: #fff;
+    max-width: 1000px;
+    margin: 0 auto;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+}
+
+.admin-title {
+    font-size: 1.8rem;
+    color: #2c2523;
+    margin-bottom: 25px;
+    text-align: center;
+    border-bottom: 2px solid #eef0f2;
+    padding-bottom: 15px;
+}
+
+.admin-form {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.admin-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+}
+.admin-input:focus { border-color: #c29b62; }
+
+.admin-btn-add {
+    background: #2c2523;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+    white-space: nowrap;
+}
+.admin-btn-add:hover { background: #1a1614; }
+
+/* KOTAK SUCCESS LINK BARU */
+.success-box {
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #c29b62;
+    background: #fdfbf7;
+    border-radius: 8px;
+    text-align: center;
+}
+.success-link {
+    color: #1565c0;
+    font-weight: bold;
+    text-decoration: none;
+    word-break: break-all;
+    display: inline-block;
+    margin-top: 8px;
+}
+.btn-copy-main {
+    background: #c29b62;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+.btn-copy-main:hover { background: #a88554; }
+
+/* TABEL DAFTAR TAMU */
+.table-responsive { overflow-x: auto; }
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+
+.admin-table th {
+    background: #f8f9fa;
+    text-align: left;
+    padding: 14px;
+    color: #666;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.admin-table td {
+    padding: 14px;
+    border-bottom: 1px solid #f1f3f5;
+    vertical-align: middle;
+}
+
+.fw-bold { font-weight: 600; color: #2b2b2b; }
+
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+.status-badge.hadir { background: #e8f5e9; color: #2e7d32; }
+.status-badge.tidak-hadir { background: #ffebee; color: #c62828; }
+.status-badge.pending { background: #fff3e0; color: #ef6c00; }
+
+.action-buttons { display: flex; gap: 10px; }
+.btn-copy { background: #e3f2fd; color: #1565c0; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.8rem; }
+.btn-copy:hover { background: #bbdefb; }
+.btn-delete { background: #ffebee; color: #c62828; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.8rem; }
+.btn-delete:hover { background: #ffcdd2; }
