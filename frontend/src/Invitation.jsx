@@ -3,9 +3,58 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import "./Invitation.css";
 
+// Helper untuk menyingkat nama:
+// 1. Awalan Muhammad / Mohammad otomatis disingkat menjadi "M." (misal: "Muhammad Dzikri Fauzan" -> "M. Dzikri Fauzan")
+// 2. Jika nama memiliki lebih dari 2 kata, kata ke-3 dan seterusnya otomatis disingkat (misal: "Breza Artha Medico" -> "Breza Artha M.")
+const formatGuestName = (rawName) => {
+  if (!rawName) return "Tamu Undangan";
+  const trimmed = rawName.trim();
+  if (!trimmed) return "Tamu Undangan";
+
+  const words = trimmed.split(/\s+/);
+  if (words.length === 0) return "Tamu Undangan";
+
+  // Cek apakah kata pertama adalah variasi dari Muhammad / Mohammad
+  const muhammadRegex = /^(muhammad|mohammad|muhamad|mohamad|mochammad|mochamad|muh\.?|moh\.?)$/i;
+  const startsWithMuhammad = muhammadRegex.test(words[0]);
+
+  if (startsWithMuhammad && words.length > 1) {
+    const remainingWords = words.slice(1);
+    if (remainingWords.length <= 2) {
+      return `M. ${remainingWords.join(" ")}`.trim();
+    }
+    const firstTwo = remainingWords.slice(0, 2).join(" ");
+    const abbreviated = remainingWords
+      .slice(2)
+      .map((w) => {
+        const clean = w.replace(/[^a-zA-Z0-9]/g, "");
+        return clean ? `${clean.charAt(0).toUpperCase()}.` : "";
+      })
+      .filter(Boolean)
+      .join(" ");
+    return `M. ${firstTwo} ${abbreviated}`.trim();
+  }
+
+  // Aturan standar: jika lebih dari 2 kata, kata ke-3 dan seterusnya disingkat
+  if (words.length <= 2) return trimmed;
+
+  const firstTwo = words.slice(0, 2).join(" ");
+  const abbreviated = words
+    .slice(2)
+    .map((w) => {
+      const clean = w.replace(/[^a-zA-Z0-9]/g, "");
+      return clean ? `${clean.charAt(0).toUpperCase()}.` : "";
+    })
+    .filter(Boolean)
+    .join(" ");
+
+  return `${firstTwo} ${abbreviated}`.trim();
+};
+
 export default function Invitation() {
   const { slug } = useParams();
   const [guestName, setGuestName] = useState("Tamu Undangan");
+  const [isLoadingGuest, setIsLoadingGuest] = useState(Boolean(slug));
 
   // State Animasi Amplop
   const [isSealFaded, setIsSealFaded] = useState(false);
@@ -88,6 +137,7 @@ export default function Invitation() {
   useEffect(() => {
     const fetchData = async () => {
       if (slug) {
+        setIsLoadingGuest(true);
         try {
           const resGuest = await axios.get(
             `http://localhost:5000/api/guests/${slug}`,
@@ -98,7 +148,14 @@ export default function Invitation() {
           }
         } catch (error) {
           console.error("Gagal load tamu.");
+        } finally {
+          // Berikan jeda halus agar transisi loading terasa mulus & tidak berkedip instan
+          setTimeout(() => {
+            setIsLoadingGuest(false);
+          }, 350);
         }
+      } else {
+        setIsLoadingGuest(false);
       }
 
       try {
@@ -314,7 +371,15 @@ export default function Invitation() {
                     className={isSealFaded ? "fade-out" : ""}
                   >
                     <p className="guest-to">Kepada Yth:</p>
-                    <p id="guest-name">{guestName}</p>
+                    {isLoadingGuest ? (
+                      <div className="guest-name-loading-wrapper" title="Memuat nama tamu...">
+                        <div className="guest-name-skeleton"></div>
+                      </div>
+                    ) : (
+                      <p id="guest-name" className="guest-name-fade-in">
+                        {formatGuestName(guestName)}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <img
@@ -354,8 +419,10 @@ export default function Invitation() {
             </div>
           </section>
 
-          {/* 1b. QURAN VERSE SECTION (Kutipan QS. Ar-Rum: 21) */}
-          <section className="quote-section reveal-on-scroll">
+          {/* BACKGROUND MOTIF BERULANG DI BAWAH JUMBOTRON & GRADASI */}
+          <div className="invitation-body-pattern">
+            {/* 1b. QURAN VERSE SECTION (Kutipan QS. Ar-Rum: 21) */}
+            <section className="quote-section reveal-on-scroll">
             <div className="quote-container">
               <h2 className="section-title">Tentang Cinta yang Menenangkan</h2>
               <p className="quote-text">
@@ -788,6 +855,7 @@ export default function Invitation() {
           <footer className="wedding-footer">
             <p>M. Dzikri Fauzan & Resa Erviana © 2026</p>
           </footer>
+          </div>
 
           {/* Floating Vinyl Music Player */}
           <div

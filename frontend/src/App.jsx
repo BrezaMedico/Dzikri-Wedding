@@ -1,19 +1,31 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Admin from "./Admin";
 import Invitation from "./Invitation";
+import Login from "./Login";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Halaman Admin / Input Nama */}
-        <Route path="/" element={<Admin />} />
-        <Route path="/admin" element={<Admin />} />
+        {/* Halaman Login Admin */}
+        <Route path="/admin/login" element={<Login />} />
 
-        {/* Halaman Undangan (Desain Amplop + Animasi) */}
+        {/* Halaman Admin (Dilindungi Autentikasi & Token 1 Minggu) */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <Admin />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Halaman Publik: Undangan Pernikahan (Tamu Umum & Tamu Khusus ber-Slug) */}
+        <Route path="/" element={<Invitation />} />
         <Route path="/:slug" element={<Invitation />} />
 
-        {/* Jika URL tidak ditemukan, kembalikan ke Admin */}
+        {/* Jika URL lain tidak ditemukan, arahkan ke Halaman Undangan */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>

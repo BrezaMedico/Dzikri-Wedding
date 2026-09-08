@@ -1,11 +1,112 @@
 .admin-container {
     min-height: 100vh;
     background-color: #f4f7f6;
-    padding: 40px 20px;
+    padding: 30px 20px 60px;
     font-family: 'Plus Jakarta Sans', sans-serif;
     color: #333;
 }
 
+/* TOP NAVBAR ADMIN */
+.admin-header-bar {
+    max-width: 1000px;
+    margin: 0 auto 20px auto;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.admin-user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-avatar {
+    width: 38px;
+    height: 38px;
+    background: #faf4eb;
+    border: 1px solid #e7d5b8;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+
+.admin-user-name {
+    font-weight: 700;
+    color: #2c2523;
+    font-size: 0.96rem;
+}
+
+.admin-session-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.76rem;
+    color: #5b6471;
+    font-weight: 500;
+}
+
+.dot-active {
+    width: 7px;
+    height: 7px;
+    background: #10b981;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+.admin-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-view-invitation {
+    background: #fdfbf7;
+    color: #936f36;
+    border: 1px solid #dcc9ad;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-view-invitation:hover {
+    background: #f7eee1;
+    color: #6d4f1f;
+}
+
+.btn-logout {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-logout:hover {
+    background: #fecaca;
+    color: #991b1b;
+}
+
+/* MAIN CARD */
 .admin-card {
     background: #fff;
     max-width: 1000px;
@@ -123,3 +224,17 @@
 .btn-copy:hover { background: #bbdefb; }
 .btn-delete { background: #ffebee; color: #c62828; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.8rem; }
 .btn-delete:hover { background: #ffcdd2; }
+
+@media (max-width: 640px) {
+    .admin-header-bar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .admin-nav-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .admin-form {
+        flex-direction: column;
+    }
+}

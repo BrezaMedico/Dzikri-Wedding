@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Admin.css";
 
 export default function Admin() {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [generatedLink, setGeneratedLink] = useState("");
   const [loading, setLoading] = useState(false);
@@ -10,18 +12,38 @@ export default function Admin() {
   // State untuk menyimpan data dari database
   const [guests, setGuests] = useState([]);
   const [rsvps, setRsvps] = useState([]);
+  const adminUsername = localStorage.getItem("admin_username") || "Admin";
+
+  // Helper untuk mengambil header token Authorization
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem("admin_token");
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
+
+  // Handler jika token habis masa berlakunya (1 minggu)
+  const handleSessionExpired = () => {
+    localStorage.removeItem("admin_token");
+    localStorage.removeItem("admin_token_expiry");
+    localStorage.removeItem("admin_username");
+    alert("Sesi login Anda telah berakhir (1 minggu). Silakan login kembali.");
+    navigate("/admin/login", { replace: true });
+  };
 
   // Fungsi untuk mengambil data tamu dan RSVP
   const fetchData = async () => {
     try {
       const [guestsRes, rsvpsRes] = await Promise.all([
-        axios.get("http://localhost:5000/api/guests"),
-        axios.get("http://localhost:5000/api/rsvp"),
+        axios.get("http://localhost:5000/api/guests", { headers: getAuthHeaders() }),
+        axios.get("http://localhost:5000/api/rsvp"), // RSVP tetap publik
       ]);
       setGuests(guestsRes.data);
       setRsvps(rsvpsRes.data);
     } catch (error) {
-      console.error("Gagal mengambil data dari database", error);
+      if (error.response?.status === 401) {
+        handleSessionExpired();
+      } else {
+        console.error("Gagal mengambil data dari database", error);
+      }
     }
   };
 
@@ -30,12 +52,16 @@ export default function Admin() {
     fetchData();
   }, []);
 
-  // Fungsi Generate Link (Sesuai kodingan kamu + Refresh Tabel)
+  // Fungsi Generate Link (Sesuai kodingan kamu + Header Auth + Refresh Tabel)
   const handleGenerate = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:5000/api/guests", { name });
+      const response = await axios.post(
+        "http://localhost:5000/api/guests",
+        { name },
+        { headers: getAuthHeaders() }
+      );
       
       const currentDomain = window.location.origin;
       const newLink = `${currentDomain}/${response.data.slug}`;
@@ -44,21 +70,31 @@ export default function Admin() {
       setName("");
       fetchData(); // Langsung update tabel di bawah
     } catch (error) {
-      alert("Gagal membuat link!");
-      console.error(error);
+      if (error.response?.status === 401) {
+        handleSessionExpired();
+      } else {
+        alert("Gagal membuat link!");
+        console.error(error);
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  // Fungsi Hapus Data
+  // Fungsi Hapus Data (Dengan Header Auth)
   const handleDelete = async (id) => {
     if (window.confirm("Apakah Anda yakin ingin menghapus data tamu ini?")) {
       try {
-        await axios.delete(`http://localhost:5000/api/guests/${id}`);
+        await axios.delete(`http://localhost:5000/api/guests/${id}`, {
+          headers: getAuthHeaders(),
+        });
         fetchData(); // Update tabel setelah dihapus
       } catch (error) {
-        alert("Gagal menghapus data");
+        if (error.response?.status === 401) {
+          handleSessionExpired();
+        } else {
+          alert("Gagal menghapus data");
+        }
       }
     }
   };
@@ -70,8 +106,51 @@ export default function Admin() {
     alert(`Link berhasil disalin!\n${url}`);
   };
 
+  // Fungsi Logout
+  const handleLogout = () => {
+    if (window.confirm("Apakah Anda yakin ingin keluar dari panel admin?")) {
+      localStorage.removeItem("admin_token");
+      localStorage.removeItem("admin_token_expiry");
+      localStorage.removeItem("admin_username");
+      navigate("/admin/login", { replace: true });
+    }
+  };
+
   return (
     <div className="admin-container">
+      {/* Top Navbar Admin */}
+      <div className="admin-header-bar">
+        <div className="admin-user-info">
+          <span className="admin-avatar">👤</span>
+          <div>
+            <div className="admin-user-name">Halo, {adminUsername}</div>
+            <div className="admin-session-badge">
+              <span className="dot-active"></span> Sesi aktif 1 minggu
+            </div>
+          </div>
+        </div>
+
+        <div className="admin-nav-actions">
+          <a
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-view-invitation"
+            title="Buka halaman undangan publik"
+          >
+            Lihat Undangan Publik ↗
+          </a>
+          <button
+            type="button"
+            className="btn-logout"
+            onClick={handleLogout}
+            title="Keluar dari sesi Admin"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+
       <div className="admin-card">
         <h2 className="admin-title">Admin - Generate Undangan</h2>
         
@@ -90,7 +169,7 @@ export default function Admin() {
           </button>
         </form>
 
-        {/* KOTAK SUCCESS LINK (Dari Kodingan Kamu) */}
+        {/* KOTAK SUCCESS LINK */}
         {generatedLink && (
           <div className="success-box">
             <p>Link berhasil dibuat untuk tamu tersebut:</p>

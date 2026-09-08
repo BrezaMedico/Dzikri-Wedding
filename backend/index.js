@@ -1,11 +1,31 @@
 const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+const JWT_SECRET = process.env.JWT_SECRET || 'super_secret_wedding_jwt_key_2026';
+
+// Middleware proteksi khusus Admin
+const verifyAdminToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) {
+    return res.status(401).json({ error: 'Akses ditolak. Silakan login terlebih dahulu.' });
+  }
+
+  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.admin = decoded;
+    next();
+  } catch (err) {
+    return res.status(401).json({ error: 'Sesi telah berakhir atau token tidak valid. Silakan login kembali.' });
+  }
+};
 
 // 1. Setup koneksi langsung ke Neon Database
 const pool = new Pool({
@@ -13,6 +33,11 @@ const pool = new Pool({
   ssl: {
     rejectUnauthorized: false // Wajib untuk Neon
   }
+});
+
+// Tangani error koneksi idle agar server tidak crash saat Neon sleep / timeout
+pool.on('error', (err) => {
+  console.error('⚠️ Neon DB idle client error (handled):', err.message);
 });
 
 // 2. Bikin tabel otomatis jika belum ada
@@ -49,11 +74,53 @@ const initDB = async () => {
 initDB();
 
 // ==========================================
+// ENDPOINT ADMIN AUTH (LOGIN & TOKEN 1 MINGGU)
+// ==========================================
+
+// Endpoint Login Admin
+app.post('/api/admin/login', (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const adminUser = process.env.ADMIN_USERNAME || 'admin';
+    const adminPass = process.env.ADMIN_PASSWORD || 'admin123';
+
+    // Mendukung login dengan username & password, atau jika hanya password diisi
+    const isUsernameMatch = !username || username.trim() === adminUser;
+    const isPasswordMatch = password && password.trim() === adminPass;
+
+    if (isUsernameMatch && isPasswordMatch) {
+      // Buat token JWT berlaku selama 7 hari (1 minggu)
+      const token = jwt.sign(
+        { role: 'admin', username: adminUser },
+        JWT_SECRET,
+        { expiresIn: '7d' }
+      );
+
+      return res.json({
+        message: 'Login berhasil!',
+        token,
+        username: adminUser,
+        expiresIn: '7d'
+      });
+    }
+
+    return res.status(401).json({ error: 'Username atau Password salah!' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint Verifikasi Token (Cek status aktif)
+app.get('/api/admin/verify', verifyAdminToken, (req, res) => {
+  res.json({ valid: true, admin: req.admin });
+});
+
+// ==========================================
 // ENDPOINT GUESTS (ADMIN MEMBUAT UNDANGAN)
 // ==========================================
 
-// 3. Endpoint POST: Membuat Undangan Baru
-app.post('/api/guests', async (req, res) => {
+// 3. Endpoint POST: Membuat Undangan Baru (Khusus Admin)
+app.post('/api/guests', verifyAdminToken, async (req, res) => {
   try {
     const { name } = req.body;
     if (!name) return res.status(400).json({ error: 'Nama harus diisi' });
@@ -141,8 +208,8 @@ app.get('/api/rsvp', async (req, res) => {
   }
 });
 
-// 4b. Endpoint GET: Mengambil SEMUA nama (Untuk Tabel Admin)
-app.get('/api/guests', async (req, res) => {
+// 4b. Endpoint GET: Mengambil SEMUA nama (Untuk Tabel Admin - Khusus Admin)
+app.get('/api/guests', verifyAdminToken, async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM guests ORDER BY created_at DESC');
     res.json(result.rows);
@@ -151,8 +218,8 @@ app.get('/api/guests', async (req, res) => {
   }
 });
 
-// 4c. Endpoint DELETE: Menghapus data tamu
-app.delete('/api/guests/:id', async (req, res) => {
+// 4c. Endpoint DELETE: Menghapus data tamu (Khusus Admin)
+app.delete('/api/guests/:id', verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
     await pool.query('DELETE FROM guests WHERE id = $1', [id]);
