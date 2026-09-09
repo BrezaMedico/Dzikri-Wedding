@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Admin from "./Admin";
-import Invitation from "./Invitation";
-import Login from "./Login";
-import ProtectedRoute from "./ProtectedRoute";
+import Admin from "./pages/Admin";
+import Invitation from "./pages/Invitation";
+import Login from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (

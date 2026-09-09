@@ -2,54 +2,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import "./Invitation.css";
-
-// Helper untuk menyingkat nama:
-// 1. Awalan Muhammad / Mohammad otomatis disingkat menjadi "M." (misal: "Muhammad Dzikri Fauzan" -> "M. Dzikri Fauzan")
-// 2. Jika nama memiliki lebih dari 2 kata, kata ke-3 dan seterusnya otomatis disingkat (misal: "Breza Artha Medico" -> "Breza Artha M.")
-const formatGuestName = (rawName) => {
-  if (!rawName) return "Tamu Undangan";
-  const trimmed = rawName.trim();
-  if (!trimmed) return "Tamu Undangan";
-
-  const words = trimmed.split(/\s+/);
-  if (words.length === 0) return "Tamu Undangan";
-
-  // Cek apakah kata pertama adalah variasi dari Muhammad / Mohammad
-  const muhammadRegex = /^(muhammad|mohammad|muhamad|mohamad|mochammad|mochamad|muh\.?|moh\.?)$/i;
-  const startsWithMuhammad = muhammadRegex.test(words[0]);
-
-  if (startsWithMuhammad && words.length > 1) {
-    const remainingWords = words.slice(1);
-    if (remainingWords.length <= 2) {
-      return `M. ${remainingWords.join(" ")}`.trim();
-    }
-    const firstTwo = remainingWords.slice(0, 2).join(" ");
-    const abbreviated = remainingWords
-      .slice(2)
-      .map((w) => {
-        const clean = w.replace(/[^a-zA-Z0-9]/g, "");
-        return clean ? `${clean.charAt(0).toUpperCase()}.` : "";
-      })
-      .filter(Boolean)
-      .join(" ");
-    return `M. ${firstTwo} ${abbreviated}`.trim();
-  }
-
-  // Aturan standar: jika lebih dari 2 kata, kata ke-3 dan seterusnya disingkat
-  if (words.length <= 2) return trimmed;
-
-  const firstTwo = words.slice(0, 2).join(" ");
-  const abbreviated = words
-    .slice(2)
-    .map((w) => {
-      const clean = w.replace(/[^a-zA-Z0-9]/g, "");
-      return clean ? `${clean.charAt(0).toUpperCase()}.` : "";
-    })
-    .filter(Boolean)
-    .join(" ");
-
-  return `${firstTwo} ${abbreviated}`.trim();
-};
+import { formatGuestName } from "../../lib/formatGuestName";
 
 export default function Invitation() {
   const { slug } = useParams();
@@ -119,17 +72,64 @@ export default function Invitation() {
     setTimeout(() => setCopiedTarget(""), 2500); // Teks kembali normal setelah 2.5 detik
   };
 
+  // Data 4 Slot Foto Galeri (Kotak Konsisten)
+  const galleryPhotos = useMemo(
+    () => [
+      { id: 1, src: "/images/gallery-1.jpg", alt: "Foto Galeri 1" },
+      { id: 2, src: "/images/gallery-2.jpg", alt: "Foto Galeri 2" },
+      { id: 3, src: "/images/gallery-3.jpg", alt: "Foto Galeri 3" },
+      { id: 4, src: "/images/gallery-4.jpg", alt: "Foto Galeri 4" },
+    ],
+    [],
+  );
+
+  // State Lightbox Modal Galeri
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(null);
+
+  const handleNextPhoto = (e) => {
+    if (e) e.stopPropagation();
+    setSelectedPhotoIndex((prev) =>
+      prev !== null ? (prev + 1) % galleryPhotos.length : null,
+    );
+  };
+
+  const handlePrevPhoto = (e) => {
+    if (e) e.stopPropagation();
+    setSelectedPhotoIndex((prev) =>
+      prev !== null
+        ? (prev - 1 + galleryPhotos.length) % galleryPhotos.length
+        : null,
+    );
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (selectedPhotoIndex === null) return;
+      if (e.key === "Escape") setSelectedPhotoIndex(null);
+      if (e.key === "ArrowRight") handleNextPhoto();
+      if (e.key === "ArrowLeft") handlePrevPhoto();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedPhotoIndex]);
+
   // State Komentar / Buku Tamu
   const [showAllComments, setShowAllComments] = useState(false);
   const [comments, setComments] = useState([]);
 
   const flowers = useMemo(() => {
-    return Array.from({ length: 14 }).map((_, i) => ({
+    // Variasi ukuran bunga bervariasi dari 10px (kecil halus) hingga 36px (besar anggun)
+    const sizes = [10, 14, 18, 22, 26, 32, 12, 16, 20, 24, 30, 36];
+    const opacities = [0.4, 0.55, 0.65, 0.75, 0.5, 0.6, 0.7];
+
+    return Array.from({ length: 32 }).map((_, i) => ({
       id: i,
-      left: `${(i * 7.5 + Math.random() * 5) % 95}%`,
-      duration: `${10 + (i % 3) * 3}s`,
-      delay: `${(i * 1.5) % 6}s`,
-      size: `${18 + (i % 3) * 4}px`, // Ukuran bunga
+      left: `${(i * 3.125 + (i % 5) * 1.8) % 96}%`,
+      duration: `${8 + (i % 6) * 2}s`,
+      delay: `${(i * 0.45) % 9}s`,
+      size: `${sizes[i % sizes.length]}px`,
+      opacity: opacities[i % opacities.length],
+      swayClass: i % 2 === 0 ? "sway-left" : "sway-right",
     }));
   }, []);
 
@@ -323,27 +323,29 @@ export default function Invitation() {
         loop
       />
 
-      {/* ANIMASI BUNGA JATUH */}
-      <div className="falling-leaves-container">
-        {flowers.map((flower) => (
-          <div
-            key={flower.id}
-            className="leaf-item"
-            style={{
-              left: flower.left,
-              animationDuration: flower.duration,
-              animationDelay: flower.delay,
-              width: flower.size,
-              height: flower.size,
-            }}
-          >
-            {/* SVG Bunga Kelopak 4 */}
-            <svg viewBox="0 0 24 24" fill="#c29b62" opacity="0.6">
-              <path d="M12,2 C15,2 16,5 16,8 C19,8 22,9 22,12 C22,15 19,16 16,16 C16,19 15,22 12,22 C9,22 8,19 8,16 C5,16 2,15 2,12 C2,9 5,8 8,8 C8,5 9,2 12,2 Z" />
-            </svg>
-          </div>
-        ))}
-      </div>
+      {/* ANIMASI BUNGA JATUH — Fixed di viewport di luar main-content sehingga tidak mengikuti scroll */}
+      {showMainContent && (
+        <div className="falling-leaves-container">
+          {flowers.map((flower) => (
+            <div
+              key={flower.id}
+              className={`leaf-item ${flower.swayClass}`}
+              style={{
+                left: flower.left,
+                animationDuration: flower.duration,
+                animationDelay: flower.delay,
+                width: flower.size,
+                height: flower.size,
+              }}
+            >
+              {/* SVG Bunga Kelopak 4 */}
+              <svg viewBox="0 0 24 24" fill="#c29b62" opacity={flower.opacity}>
+                <path d="M12,2 C15,2 16,5 16,8 C19,8 22,9 22,12 C22,15 19,16 16,16 C16,19 15,22 12,22 C9,22 8,19 8,16 C5,16 2,15 2,12 C2,9 5,8 8,8 C8,5 9,2 12,2 Z" />
+              </svg>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div id="app-container">
         {!hideEnvelopeScreen && (
@@ -803,6 +805,113 @@ export default function Invitation() {
               </div>
             </div>
           </section>
+
+          {/* GALERI FOTO (4 SLOT FOTO AESTHETIC DENGAN LIGHTBOX) */}
+          <section className="section-padding reveal-on-scroll">
+            <div className="gallery-section-card">
+              <div className="gallery-header">
+                <span className="gallery-tag">Galeri Cinta</span>
+                <h2 className="section-title">Momen Bahagia</h2>
+                <p className="gallery-subtitle">
+                  Setiap detik mengabadikan ketulusan dan kehangatan rasa kami berdua
+                </p>
+              </div>
+
+              <div className="gallery-grid">
+                {galleryPhotos.map((photo, index) => (
+                  <div
+                    key={photo.id}
+                    className="gallery-item"
+                    onClick={() => setSelectedPhotoIndex(index)}
+                  >
+                    <div className="gallery-frame-outer">
+                      <div className="gallery-img-wrapper">
+                        <img
+                          src={photo.src}
+                          alt={photo.alt}
+                          className="gallery-img"
+                          loading="lazy"
+                        />
+                        <div className="gallery-overlay">
+                          <div className="gallery-zoom-icon">
+                            <svg
+                              width="22"
+                              height="22"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <circle cx="11" cy="11" r="8" />
+                              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                              <line x1="11" y1="8" x2="11" y2="14" />
+                              <line x1="8" y1="11" x2="14" y2="11" />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* LIGHTBOX MODAL PREVIEW */}
+          {selectedPhotoIndex !== null && (
+            <div
+              className="gallery-lightbox-backdrop"
+              onClick={() => setSelectedPhotoIndex(null)}
+            >
+              <div
+                className="gallery-lightbox-modal"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  type="button"
+                  className="lightbox-close-btn"
+                  onClick={() => setSelectedPhotoIndex(null)}
+                  title="Tutup (Esc)"
+                >
+                  ✕
+                </button>
+
+                <div className="lightbox-image-container">
+                  <img
+                    src={galleryPhotos[selectedPhotoIndex].src}
+                    alt={galleryPhotos[selectedPhotoIndex].alt}
+                    className="lightbox-active-img"
+                  />
+                </div>
+
+                <div className="lightbox-info">
+                  <span className="lightbox-tag">Galeri Foto</span>
+                  <div className="lightbox-counter">
+                    {selectedPhotoIndex + 1} / {galleryPhotos.length}
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  className="lightbox-nav-btn prev"
+                  onClick={handlePrevPhoto}
+                  title="Foto Sebelumnya (←)"
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  className="lightbox-nav-btn next"
+                  onClick={handleNextPhoto}
+                  title="Foto Selanjutnya (→)"
+                >
+                  ›
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* SECTION KOMENTAR DENGAN GRADASI FADE */}
           {comments.length > 0 && (
