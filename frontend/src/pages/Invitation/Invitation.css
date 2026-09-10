@@ -184,6 +184,14 @@
     box-sizing: border-box;
 }
 
+/* Background jumbotron khusus HP / Layar Mobile (Portrait) */
+@media (max-width: 768px) {
+    .hero-section {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.38)), url('/images/hero-mobile.jpg');
+        background-position: center top;
+    }
+}
+
 /* Elegant bottom fade to the pattern background - Transisi diperkuat & diperpanjang agar lebih halus */
 .hero-section::after {
     content: "";
@@ -341,11 +349,12 @@
     display: inline-block;
 }
 
+.quote-title,
 .quote-subtitle {
     font-family: 'Playfair Display', serif;
-    font-size: 1.35rem;
+    font-size: 1.8rem;
     color: #2c2523;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.3px;
     margin: 0 0 16px 0;
 }
@@ -437,8 +446,9 @@
 
 .couple-title {
     font-family: 'Playfair Display', serif;
-    font-size: 1.65rem;
+    font-size: 1.8rem;
     color: #2c2523;
+    font-weight: 700;
     margin-bottom: 0;
 }
 
@@ -504,6 +514,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center 18%;
     display: block;
     transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -540,28 +551,47 @@
 
 .profile-name {
     font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
+    font-size: 1.35rem;
     color: #2c2523;
-    margin-bottom: 5px;
+    margin: 0 0 8px 0;
     font-weight: 700;
-    line-height: 1.3;
+    line-height: 1.35;
+    letter-spacing: 0.2px;
 }
 
-.lineage-bin {
+.lineage-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 18px;
+    max-width: 320px;
+}
+
+.lineage-relation {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #c29b62;
-    letter-spacing: 0.5px;
-    margin-bottom: 4px;
+    font-size: 0.82rem;
+    color: #a08465;
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    margin-bottom: 6px;
 }
 
-.lineage-desc {
-    font-size: 0.82rem;
-    color: #776e65;
-    line-height: 1.5;
-    margin-bottom: 16px;
-    max-width: 280px;
+.lineage-parents {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin: 0;
+}
+
+.parent-line {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.88rem;
+    color: #4a3e3d;
+    line-height: 1.55;
+    font-weight: 600;
+    margin: 0;
 }
 
 /* Tombol Profil Instagram */
@@ -683,8 +713,11 @@
         border-radius: 20px;
     }
 
-    .quote-subtitle {
-        font-size: 1.15rem;
+    .section-title,
+    .quote-title,
+    .quote-subtitle,
+    .couple-title {
+        font-size: 1.45rem;
     }
 
     .quote-text-wrapper {
@@ -705,10 +738,6 @@
         margin: 18px auto 16px auto;
     }
 
-    .couple-title {
-        font-size: 1.4rem;
-    }
-
     .profile-card {
         padding: 24px 16px 20px 16px;
     }
@@ -719,15 +748,16 @@
     }
 
     .profile-name {
-        font-size: 1.22rem;
+        font-size: 1.2rem;
     }
 
-    .lineage-bin {
-        font-size: 0.88rem;
-    }
-
-    .lineage-desc {
+    .lineage-relation {
         font-size: 0.78rem;
+    }
+
+    .parent-line {
+        font-size: 0.82rem;
+        line-height: 1.5;
     }
 }
 
@@ -825,13 +855,174 @@
 .date-highlight { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: #c29b62; margin-bottom: 22px; font-weight: 600; }
 .flip-clock-board { background: #faf8f5; border-radius: 16px; padding: 18px 12px; border: 1px solid #f0ebe1; display: flex; justify-content: space-around; align-items: center; }
 .flip-group { display: flex; flex-direction: column; align-items: center; }
-.flip-pair { display: flex; gap: 4px; }
-.flip-card-digit { background: #ffffff; color: #2c2523; width: 32px; height: 48px; border-radius: 8px; border: 1px solid #e8e0d0; font-size: 1.6rem; font-weight: 700; display: flex; justify-content: center; align-items: center; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.06); }
-.flip-card-digit .card-line { position: absolute; width: 100%; height: 1px; background: #e0d5c1; top: 50%; }
-.flip-card-digit .pin { position: absolute; width: 2px; height: 5px; background: #c29b62; top: 50%; transform: translateY(-50%); }
-.flip-card-digit .pin.left { left: 1px; }
-.flip-card-digit .pin.right { right: 1px; }
-.clock-label { font-size: 0.65rem; color: #8c7a6b; margin-top: 10px; letter-spacing: 1.5px; font-weight: 600; }
+.flip-pair { display: flex; gap: 5px; }
+
+/* WADAH DIGIT FLIP 3D (ANGKA UTUH, BERSIH & JELAS TANPA GARIS TENGAH) */
+.flip-card-digit {
+    background: #ffffff;
+    color: #2c2523;
+    width: 36px;
+    height: 52px;
+    border-radius: 10px;
+    border: 1.5px solid #e5dbcd;
+    position: relative;
+    perspective: 350px;
+    -webkit-perspective: 350px;
+    box-shadow: 0 4px 12px rgba(44, 37, 35, 0.08);
+    box-sizing: border-box;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.digit-face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #2c2523;
+    background: #ffffff;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    user-select: none;
+}
+
+/* ANIMASI 3D FLIP VERTIKAL HALUS */
+.digit-face.flip-out {
+    animation: flipOutDigit 0.19s cubic-bezier(0.4, 0, 1, 1) forwards;
+    transform-origin: center center;
+}
+
+.digit-face.flip-in {
+    animation: flipInDigit 0.19s cubic-bezier(0, 0, 0.2, 1) 0.19s forwards;
+    transform-origin: center center;
+    transform: rotateX(90deg);
+}
+
+@keyframes flipOutDigit {
+    0% {
+        transform: rotateX(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: rotateX(-90deg);
+        opacity: 0.15;
+    }
+}
+
+@keyframes flipInDigit {
+    0% {
+        transform: rotateX(90deg);
+        opacity: 0.15;
+    }
+    100% {
+        transform: rotateX(0deg);
+        opacity: 1;
+    }
+}
+
+.clock-label {
+    font-size: 0.65rem;
+    color: #8c7a6b;
+    margin-top: 10px;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+}
+
+/* ORNAMEN & JADWAL RANGKAIAN ACARA (AKAD & RESEPSI) */
+.event-schedule-container {
+    margin-top: 24px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.schedule-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 160px;
+    margin-bottom: 20px;
+}
+
+.schedule-divider-line {
+    flex: 1;
+    height: 1px;
+    background: #e0d5c1;
+}
+
+.schedule-divider-diamond {
+    color: #c29b62;
+    font-size: 0.72rem;
+    line-height: 1;
+}
+
+.schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.schedule-item {
+    background: #faf8f5;
+    border: 1.5px solid #ece3d3;
+    border-radius: 16px;
+    padding: 18px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.schedule-item:hover {
+    border-color: #c29b62;
+    background: #ffffff;
+    box-shadow: 0 6px 18px rgba(194, 155, 98, 0.14);
+    transform: translateY(-2px);
+}
+
+.schedule-badge {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #2c2523;
+    margin-bottom: 8px;
+    letter-spacing: 0.2px;
+}
+
+.schedule-time {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #c29b62;
+    letter-spacing: 0.4px;
+    background: #faf4e8;
+    border: 1px solid #ebdcc5;
+    padding: 6px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.schedule-clock-icon {
+    flex-shrink: 0;
+    color: #c29b62;
+}
 
 /* LOKASI ACARA */
 .location-card { background: #ffffff; border-radius: 20px; overflow: hidden; border: 2px solid #e0d5c1; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); position: relative; z-index: 5; }
@@ -839,6 +1030,27 @@
 .address-details { padding: 20px; text-align: left; }
 .address-details h3 { font-size: 1.05rem; color: #2c2523; margin-bottom: 4px; }
 .address-details p { font-size: 0.82rem; color: #665b55; line-height: 1.5; }
+.open-map-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #2c2523;
+    color: #fdfbf7;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 20px;
+    text-decoration: none;
+    margin-top: 12px;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 12px rgba(44, 37, 35, 0.15);
+}
+.open-map-btn:hover {
+    background: #c29b62;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(194, 155, 98, 0.3);
+}
 
 /* MODERN RSVP FORM - KINI KIRIM KE DATABASE */
 .modern-rsvp-card { background: #ffffff; border-radius: 20px; padding: 25px 20px; border: 2px solid #e0d5c1; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); position: relative; z-index: 5; }
@@ -1547,18 +1759,24 @@
    LIGHTBOX MODAL PREVIEW (FULL SCREEN BLUR)
 ========================================= */
 
-.gallery-lightbox-backdrop {
+/* =========================================
+   3D PARALLAX PHOTO CARD MODAL (SERET & PUTAR 3D)
+========================================= */
+
+.gallery-3d-backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(20, 16, 15, 0.88);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(15, 12, 11, 0.93);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     z-index: 10000;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: 14px;
     box-sizing: border-box;
+    overflow: hidden;
     animation: lightboxFadeIn 0.3s ease forwards;
 }
 
@@ -1567,111 +1785,392 @@
     to { opacity: 1; }
 }
 
-.gallery-lightbox-modal {
-    position: relative;
-    max-width: 520px;
+/* TOPBAR & TOMBOL KEMBALI */
+.gallery-3d-topbar {
     width: 100%;
-    max-height: 90vh;
-    background: #ffffff;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 2px solid #e0d5c1;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+    max-width: 650px;
     display: flex;
-    flex-direction: column;
-    animation: lightboxScaleUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    z-index: 30;
+    padding: 4px 4px;
+    flex-shrink: 0;
 }
 
-@keyframes lightboxScaleUp {
-    from {
-        opacity: 0;
-        transform: scale(0.92);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+/* TOMBOL KEMBALI UTAMA (PROMINENT & ELEGAN) */
+.gallery-3d-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #2c2523;
+    color: #fdfbf7;
+    border: 1.5px solid #c29b62;
+    border-radius: 30px;
+    padding: 8px 18px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    transition: all 0.25s ease;
 }
 
-.lightbox-close-btn {
-    position: absolute;
-    top: 14px;
-    right: 14px;
+.gallery-3d-back-btn:hover {
+    background: #c29b62;
+    color: #ffffff;
+    transform: translateX(-3px);
+    box-shadow: 0 6px 18px rgba(194, 155, 98, 0.45);
+}
+
+.gallery-3d-hint-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #f5ede2;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.76rem;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    backdrop-filter: blur(6px);
+}
+
+.hint-hand-icon {
+    animation: handSway 2s ease-in-out infinite;
+    display: inline-block;
+}
+
+@keyframes handSway {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-12deg); }
+    75% { transform: rotate(12deg); }
+}
+
+.gallery-3d-top-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.gallery-3d-btn-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    border: 1px solid rgba(194, 155, 98, 0.5);
+    border-radius: 20px;
+    padding: 7px 14px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.gallery-3d-btn-pill:hover {
+    background: #c29b62;
+    color: #ffffff;
+    border-color: #c29b62;
+    transform: translateY(-2px);
+}
+
+.gallery-3d-close-btn {
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: rgba(44, 37, 35, 0.75);
+    background: rgba(44, 37, 35, 0.85);
     color: #ffffff;
-    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
     font-size: 1.1rem;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 20;
     transition: all 0.25s ease;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-.lightbox-close-btn:hover {
+.gallery-3d-close-btn:hover {
     background: #c29b62;
+    border-color: #c29b62;
     transform: rotate(90deg) scale(1.08);
 }
 
-.lightbox-image-container {
+/* 3D STAGE (PERSPECTIVE SPACE) */
+.gallery-3d-stage {
+    perspective: 1400px;
+    -webkit-perspective: 1400px;
     width: 100%;
-    max-height: 70vh;
-    background: #111111;
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: grab;
+    padding: 8px 0;
+}
+
+.gallery-3d-stage:active {
+    cursor: grabbing;
+}
+
+/* 3D KARTU KERTAS (INTERAKTIF SERET) */
+.gallery-3d-card {
+    position: relative;
+    width: clamp(280px, 86vw, 380px);
+    height: clamp(420px, 72vh, 550px);
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    filter: drop-shadow(0 22px 40px rgba(0, 0, 0, 0.65));
+    will-change: transform;
+}
+
+.gallery-3d-card.is-dragging {
+    transition: none !important;
+}
+
+/* SISI KARTU (FRONT & BACK) */
+.gallery-card-face {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    box-sizing: border-box;
     overflow: hidden;
 }
 
-.lightbox-active-img {
+/* SISI DEPAN: KERTAS FOTO EKSKLUSIF */
+.gallery-card-face.card-front {
+    background: #ffffff;
+    border: 2px solid #e0d5c1;
+    padding: 12px 12px 16px 12px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.9), 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.card-front-inner {
     width: 100%;
     height: 100%;
-    max-height: 70vh;
-    object-fit: contain;
-    display: block;
-}
-
-.lightbox-info {
-    padding: 14px 20px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #faf8f5;
-    border-top: 1px solid #ece3d3;
+    flex-direction: column;
 }
 
-.lightbox-tag {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #4a3f35;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+.card-photo-box {
+    position: relative;
+    width: 100%;
+    flex: 1;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #1a1614;
+    border: 1px solid #e8dfd1;
 }
 
-.lightbox-counter {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #c29b62;
-    background: #f0ebe1;
-    padding: 5px 12px;
-    border-radius: 6px;
-    border: 1px solid #e5dac3;
+.card-photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+}
+
+.card-sheen-highlight {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 55%);
+    pointer-events: none;
+}
+
+.card-front-caption {
+    padding-top: 12px;
+    text-align: center;
     flex-shrink: 0;
 }
 
-.lightbox-nav-btn {
+.card-caption-decor {
+    font-size: 0.7rem;
+    color: #c29b62;
+    letter-spacing: 3px;
+    margin-bottom: 2px;
+}
+
+.card-caption-names {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #2c2523;
+}
+
+.card-caption-sub {
+    font-size: 0.72rem;
+    color: #8c7f75;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-top: 3px;
+}
+
+/* SISI BELAKANG: TULISAN SAMBUNG ELEGAN */
+.gallery-card-face.card-back {
+    transform: rotateY(180deg);
+    background: #faf6ee;
+    border: 2px solid #c29b62;
+    padding: 12px;
+    box-shadow: inset 0 0 35px rgba(194, 155, 98, 0.15);
+}
+
+.card-back-texture {
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, #ffffff 0%, #f7f2e7 100%);
+    border: 1.5px dashed #c29b62;
+    border-radius: 14px;
+    padding: 24px 18px 20px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    position: relative;
+    box-sizing: border-box;
+}
+
+/* SUDUT ORNAMEN */
+.card-back-corner {
     position: absolute;
-    top: 45%;
-    transform: translateY(-50%);
+    font-size: 1.1rem;
+    color: #c29b62;
+    line-height: 1;
+    opacity: 0.75;
+}
+.card-back-corner.tl { top: 8px; left: 8px; }
+.card-back-corner.tr { top: 8px; right: 8px; transform: scaleX(-1); }
+.card-back-corner.bl { bottom: 8px; left: 8px; transform: scaleY(-1); }
+.card-back-corner.br { bottom: 8px; right: 8px; transform: scale(-1); }
+
+.card-back-subhead {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #a8854e;
+    margin-top: 4px;
+}
+
+/* TULISAN SAMBUNG NAMA KEDUA MEMPELAI (GREAT VIBES SCRIPT) */
+.card-back-cursive-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.25rem;
+    color: #2c2523;
+    line-height: 1.1;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 6px rgba(194, 155, 98, 0.2);
+}
+
+.card-back-cursive-amp {
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.9rem;
+    color: #c29b62;
+    line-height: 0.9;
+    margin: 2px 0;
+}
+
+.card-back-quote-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 70%;
+    margin: 6px 0;
+}
+
+.card-divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(194, 155, 98, 0.6), transparent);
+}
+
+.card-divider-gem {
+    font-size: 0.65rem;
+    color: #c29b62;
+}
+
+.card-back-quote-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.82rem;
+    color: #5c5047;
+    line-height: 1.5;
+    padding: 0 10px;
+    margin: 2px 0;
+}
+
+/* MONOGRAM WAX SEAL GOLD */
+.card-back-monogram-seal {
+    margin: 4px 0;
+}
+
+.monogram-wax {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #d4b27d 0%, #b38947 50%, #8f6727 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(143, 103, 39, 0.4), inset 0 2px 3px rgba(255, 255, 255, 0.4);
+    border: 2px solid #fdfbf7;
+}
+
+.monogram-initials {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: #ffffff;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.card-back-date-text {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #7d6e64;
+}
+
+.card-back-drag-tip {
+    font-size: 0.7rem;
+    color: #a39589;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}
+
+/* BOTTOM CONTROLS & SLIDER */
+.gallery-3d-bottom-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    z-index: 30;
+    padding: 6px 0;
+    flex-shrink: 0;
+}
+
+.gallery-3d-nav-btn {
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.9);
     color: #2c2523;
     border: 1px solid #e0d5c1;
     font-size: 1.8rem;
@@ -1679,52 +2178,80 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
     transition: all 0.2s ease;
-    z-index: 15;
     padding-bottom: 3px;
     user-select: none;
 }
 
-.lightbox-nav-btn:hover {
+.gallery-3d-nav-btn:hover {
     background: #c29b62;
     color: #ffffff;
     border-color: #c29b62;
-    transform: translateY(-50%) scale(1.1);
+    transform: scale(1.1);
 }
 
-.lightbox-nav-btn.prev {
-    left: 12px;
+.gallery-3d-counter {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fdfbf7;
+    background: rgba(44, 37, 35, 0.75);
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(194, 155, 98, 0.4);
+    letter-spacing: 1px;
 }
 
-.lightbox-nav-btn.next {
-    right: 12px;
+/* HINT DI OVERLAY GALERI UTAMA */
+.gallery-view-hint {
+    color: #fdfbf7;
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-top: 6px;
+    background: rgba(44, 37, 35, 0.7);
+    padding: 3px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(194, 155, 98, 0.4);
 }
 
-/* Mobile responsive adjustments for gallery */
-@media (max-width: 480px) {
-    .gallery-section-card {
-        padding: 26px 14px;
-        border-radius: 14px;
+/* RESPONSIVITAS MOBILE UNTUK 3D CARD */
+@media (max-width: 520px) {
+    .gallery-3d-backdrop {
+        padding: 10px 8px;
     }
-    .gallery-grid {
-        gap: 10px;
+    .gallery-3d-topbar {
+        padding: 2px 4px;
     }
-    .gallery-frame-outer {
-        padding: 6px;
-        border-radius: 6px;
+    .gallery-3d-back-btn {
+        padding: 6px 14px;
+        font-size: 0.8rem;
     }
-    .gallery-img-wrapper {
-        border-radius: 4px;
+    .gallery-3d-hint-badge span:last-child {
+        display: none; /* Hemat ruang horizontal di HP kecil */
     }
-    .lightbox-nav-btn {
+    .gallery-3d-btn-pill {
+        padding: 6px 12px;
+        font-size: 0.74rem;
+    }
+    .gallery-3d-card {
+        width: clamp(260px, 88vw, 340px);
+        height: clamp(400px, 68vh, 500px);
+    }
+    .card-back-cursive-title {
+        font-size: 1.95rem;
+    }
+    .card-back-quote-text {
+        font-size: 0.76rem;
+    }
+    .gallery-3d-nav-btn {
         width: 38px;
         height: 38px;
         font-size: 1.5rem;
     }
-    .lightbox-nav-btn.prev { left: 8px; }
-    .lightbox-nav-btn.next { right: 8px; }
 }
+
 
 /* =========================================
    ANIMASI BUNGA TUMBUH (SAVE THE DATE CARD DECOR)
@@ -1807,7 +2334,8 @@
     .guest-name-skeleton { width: 90px; height: 14px; }
     .zoom-in { transform: scale(1.18); }
 
-    .flip-card-digit { width: 26px; height: 40px; font-size: 1.3rem; }
+    .flip-card-digit { width: 28px; height: 44px; }
+    .digit-face { font-size: 1.4rem; }
     .flip-clock-board { padding: 14px 6px; }
     .clock-label { font-size: 0.55rem; letter-spacing: 1px; }
     .hero-names { font-size: 1.8rem; }
@@ -1828,6 +2356,25 @@
     }
     .invitation-body-pattern::before {
         background-size: 180px auto;
+    }
+
+    .schedule-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .schedule-item {
+        padding: 14px 12px;
+    }
+    
+    .schedule-badge {
+        font-size: 0.98rem;
+        margin-bottom: 6px;
+    }
+    
+    .schedule-time {
+        font-size: 0.78rem;
+        padding: 5px 10px;
     }
 }
 

@@ -4,6 +4,40 @@ import axios from "axios";
 import "./Invitation.css";
 import { formatGuestName } from "../../lib/formatGuestName";
 
+// Komponen Kartu Digit Animasi 3D Flip (Angka Utuh, Jelas & Tanpa Garis Pembatas Tengah)
+function FlipDigit({ digit }) {
+  const [displayDigit, setDisplayDigit] = useState(digit);
+  const [nextDigit, setNextDigit] = useState(digit);
+  const [isFlipping, setIsFlipping] = useState(false);
+
+  useEffect(() => {
+    if (digit !== displayDigit) {
+      setNextDigit(digit);
+      setIsFlipping(true);
+
+      const timer = setTimeout(() => {
+        setDisplayDigit(digit);
+        setIsFlipping(false);
+      }, 380);
+
+      return () => clearTimeout(timer);
+    }
+  }, [digit, displayDigit]);
+
+  return (
+    <div className="flip-card-digit">
+      <div className={`digit-face ${isFlipping ? "flip-out" : ""}`}>
+        {displayDigit}
+      </div>
+      {isFlipping && (
+        <div className="digit-face flip-in">
+          {nextDigit}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Invitation() {
   const { slug } = useParams();
   const [guestName, setGuestName] = useState("Tamu Undangan");
@@ -60,21 +94,25 @@ export default function Invitation() {
     }
   ];
 
-  // Data Profil Kedua Mempelai (Nama Orang Tua)
+  // Data Profil Kedua Mempelai (Nama Lengkap, Gelar & Nama Orang Tua)
   const coupleInfo = {
-    groom: {
-      fullName: "Muhammad Dzikri Fauzan",
-      fatherName: "Breza Artha Medico",
-      role: "Mempelai Pria",
-      photo: "/images/dzikri.jpg",
-      instagram: "dzikrifauzan",
-    },
     bride: {
-      fullName: "Resa Erviana",
-      fatherName: "Halipah Mubarok",
+      fullName: "Resa Erviana, S.Pd.",
       role: "Mempelai Wanita",
-      photo: "/images/resa.jpg",
-      instagram: "resaerviana",
+      photo: "/images/resa.png",
+      instagram: "ressaerv",
+      relation: "Putri terakhir dari",
+      fatherName: "Bapak H. Abdul Hamid, S.Pd.I. (Almarhum)",
+      motherName: "Ibu Hj. Iom Romsyah",
+    },
+    groom: {
+      fullName: "Muhamad Dzikri Fauzan, S.Kom., Gr.",
+      role: "Mempelai Pria",
+      photo: "/images/dzikri.png",
+      instagram: "dzikri_fauzan11",
+      relation: "Putra ketiga dari",
+      fatherName: "Bapak Drs. Yayan Royani (Almarhum)",
+      motherName: "Ibu E. Nurjanah",
     },
   };
 
@@ -90,22 +128,49 @@ export default function Invitation() {
     setTimeout(() => setCopiedTarget(""), 2500); // Teks kembali normal setelah 2.5 detik
   };
 
-  // Data 4 Slot Foto Galeri (Kotak Konsisten)
+  // Data 4 Slot Foto Galeri
   const galleryPhotos = useMemo(
     () => [
-      { id: 1, src: "/images/gallery-1.jpg", alt: "Foto Galeri 1" },
-      { id: 2, src: "/images/gallery-2.jpg", alt: "Foto Galeri 2" },
-      { id: 3, src: "/images/gallery-3.jpg", alt: "Foto Galeri 3" },
-      { id: 4, src: "/images/gallery-4.jpg", alt: "Foto Galeri 4" },
+      { id: 1, src: "/images/gallery-1.jpg", alt: "Momen Bahagia 1 - M. Dzikri Fauzan & Resa Erviana" },
+      { id: 2, src: "/images/gallery-2.jpg", alt: "Momen Bahagia 2 - M. Dzikri Fauzan & Resa Erviana" },
+      { id: 3, src: "/images/gallery-3.jpg", alt: "Momen Bahagia 3 - M. Dzikri Fauzan & Resa Erviana" },
+      { id: 4, src: "/images/gallery-4.jpg", alt: "Momen Bahagia 4 - M. Dzikri Fauzan & Resa Erviana" },
     ],
     [],
   );
 
-  // State Lightbox Modal Galeri
+  // State 3D Photo Card Viewer Modal
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(null);
+  const [rotX, setRotX] = useState(0);
+  const [rotY, setRotY] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartRef = useRef({ x: 0, y: 0, rotX: 0, rotY: 0 });
+
+  const handleOpen3DCard = (index) => {
+    setSelectedPhotoIndex(index);
+    setRotX(0);
+    setRotY(0);
+  };
+
+  const handleClose3DCard = () => {
+    setSelectedPhotoIndex(null);
+    setRotX(0);
+    setRotY(0);
+    setIsDragging(false);
+  };
+
+  const handleFlipCard = (e) => {
+    if (e) e.stopPropagation();
+    setRotY((prev) => {
+      const normalized = Math.round(prev / 180) * 180;
+      return normalized % 360 === 0 ? normalized + 180 : normalized - 180;
+    });
+  };
 
   const handleNextPhoto = (e) => {
     if (e) e.stopPropagation();
+    setRotX(0);
+    setRotY(0);
     setSelectedPhotoIndex((prev) =>
       prev !== null ? (prev + 1) % galleryPhotos.length : null,
     );
@@ -113,6 +178,8 @@ export default function Invitation() {
 
   const handlePrevPhoto = (e) => {
     if (e) e.stopPropagation();
+    setRotX(0);
+    setRotY(0);
     setSelectedPhotoIndex((prev) =>
       prev !== null
         ? (prev - 1 + galleryPhotos.length) % galleryPhotos.length
@@ -120,12 +187,49 @@ export default function Invitation() {
     );
   };
 
+  const handlePointerDown = (e) => {
+    if (e.button !== undefined && e.button !== 0) return;
+    setIsDragging(true);
+    dragStartRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      rotX,
+      rotY,
+    };
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch (err) {}
+  };
+
+  const handlePointerMove = (e) => {
+    if (!isDragging) return;
+    const deltaX = e.clientX - dragStartRef.current.x;
+    const deltaY = e.clientY - dragStartRef.current.y;
+    const newRotY = dragStartRef.current.rotY + deltaX * 0.55;
+    const newRotX = Math.max(
+      -60,
+      Math.min(60, dragStartRef.current.rotX - deltaY * 0.55)
+    );
+    setRotY(newRotY);
+    setRotX(newRotX);
+  };
+
+  const handlePointerUp = (e) => {
+    if (isDragging) {
+      setIsDragging(false);
+      try {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      } catch (err) {}
+    }
+  };
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (selectedPhotoIndex === null) return;
-      if (e.key === "Escape") setSelectedPhotoIndex(null);
+      if (e.key === "Escape") handleClose3DCard();
       if (e.key === "ArrowRight") handleNextPhoto();
       if (e.key === "ArrowLeft") handlePrevPhoto();
+      if (e.key === " " || e.key === "Enter") handleFlipCard();
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
@@ -200,7 +304,7 @@ export default function Invitation() {
 
   // 2. Logika Countdown Timer
   useEffect(() => {
-    const targetDate = new Date("2026-08-30T08:00:00").getTime();
+    const targetDate = new Date("2026-09-26T09:00:00").getTime();
     const interval = setInterval(() => {
       const now = new Date().getTime();
       const diff = targetDate - now;
@@ -374,7 +478,7 @@ export default function Invitation() {
                 <div id="paper" className={isPaperUp ? "slide-up-paper" : ""}>
                   <div className="paper-content">
                     <h2>Simpan Tanggalnya</h2>
-                    <p>Minggu, 30 Agustus 2026</p>
+                    <p>Sabtu, 26 September 2026</p>
                   </div>
                 </div>
                 <img
@@ -447,7 +551,7 @@ export default function Invitation() {
                 {/* Bagian Ayat QS. Ar-Rum: 21 (Rapi, Anggun & Bersih) */}
                 <div className="quote-block">
                   <div className="quote-badge">QS. Ar-Rum : 21</div>
-                  <h3 className="quote-subtitle">Tentang Cinta yang Menenangkan</h3>
+                  <h2 className="section-title quote-title">Tentang Cinta yang Menenangkan</h2>
                   
                   <div className="quote-text-wrapper">
                     <span className="quote-mark open">“</span>
@@ -467,101 +571,102 @@ export default function Invitation() {
 
                 {/* Header Mempelai */}
                 <div className="couple-header">
-                  <span className="couple-badge">The Happy Couple</span>
                   <h2 className="section-title couple-title">Kedua Mempelai</h2>
                 </div>
 
                 {/* Grid Profil Mempelai */}
                 <div className="couple-grid">
-                {/* Mempelai Pria */}
-                <div className="profile-card groom-card">
-                  <div className="profile-photo-wrapper">
-                    <div className="profile-photo-frame">
-                      <img
-                        src={coupleInfo.groom.photo}
-                        alt={coupleInfo.groom.fullName}
-                        className="profile-photo"
-                      />
+                  {/* Mempelai Pria */}
+                  <div className="profile-card groom-card">
+                    <div className="profile-photo-wrapper">
+                      <div className="profile-photo-frame">
+                        <img
+                          src={coupleInfo.groom.photo}
+                          alt={coupleInfo.groom.fullName}
+                          className="profile-photo"
+                        />
+                      </div>
+                      <span className="role-pill">{coupleInfo.groom.role}</span>
                     </div>
-                    <span className="role-pill">{coupleInfo.groom.role}</span>
+
+                    <div className="profile-details">
+                      <h3 className="profile-name">{coupleInfo.groom.fullName}</h3>
+                      <div className="lineage-box">
+                        <span className="lineage-relation">{coupleInfo.groom.relation}</span>
+                        <div className="lineage-parents">
+                          <p className="parent-line">{coupleInfo.groom.fatherName}</p>
+                          <p className="parent-line">dan {coupleInfo.groom.motherName}</p>
+                        </div>
+                      </div>
+
+                      {coupleInfo.groom.instagram && (
+                        <a
+                          href={`https://instagram.com/${coupleInfo.groom.instagram}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="profile-ig-btn"
+                          title={`Instagram ${coupleInfo.groom.fullName}`}
+                        >
+                          <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                          </svg>
+                          <span>@{coupleInfo.groom.instagram}</span>
+                        </a>
+                      )}
+                    </div>
                   </div>
 
-                  <div className="profile-details">
-                    <h3 className="profile-name">{coupleInfo.groom.fullName}</h3>
-                    <div className="lineage-bin">
-                      Bin {coupleInfo.groom.fatherName}
+                  {/* Ornamen Penghubung Tengah Romantis */}
+                  <div className="couple-center-divider">
+                    <div className="divider-ornament-line"></div>
+                    <div className="couple-ampersand-badge">
+                      <span className="ampersand-char">&</span>
                     </div>
-                    <p className="lineage-desc">
-                      Putra dari Bapak {coupleInfo.groom.fatherName}
-                    </p>
-
-                    {coupleInfo.groom.instagram && (
-                      <a
-                        href={`https://instagram.com/${coupleInfo.groom.instagram}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="profile-ig-btn"
-                        title={`Instagram ${coupleInfo.groom.fullName}`}
-                      >
-                        <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
-                          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                        </svg>
-                        <span>@{coupleInfo.groom.instagram}</span>
-                      </a>
-                    )}
-                  </div>
-                </div>
-
-                {/* Ornamen Penghubung Tengah Romantis */}
-                <div className="couple-center-divider">
-                  <div className="divider-ornament-line"></div>
-                  <div className="couple-ampersand-badge">
-                    <span className="ampersand-char">&</span>
-                  </div>
-                  <div className="divider-ornament-line"></div>
-                </div>
-
-                {/* Mempelai Wanita */}
-                <div className="profile-card bride-card">
-                  <div className="profile-photo-wrapper">
-                    <div className="profile-photo-frame">
-                      <img
-                        src={coupleInfo.bride.photo}
-                        alt={coupleInfo.bride.fullName}
-                        className="profile-photo"
-                      />
-                    </div>
-                    <span className="role-pill">{coupleInfo.bride.role}</span>
+                    <div className="divider-ornament-line"></div>
                   </div>
 
-                  <div className="profile-details">
-                    <h3 className="profile-name">{coupleInfo.bride.fullName}</h3>
-                    <div className="lineage-bin">
-                      Binti {coupleInfo.bride.fatherName}
+                  {/* Mempelai Wanita */}
+                  <div className="profile-card bride-card">
+                    <div className="profile-photo-wrapper">
+                      <div className="profile-photo-frame">
+                        <img
+                          src={coupleInfo.bride.photo}
+                          alt={coupleInfo.bride.fullName}
+                          className="profile-photo"
+                        />
+                      </div>
+                      <span className="role-pill">{coupleInfo.bride.role}</span>
                     </div>
-                    <p className="lineage-desc">
-                      Putri dari Bapak {coupleInfo.bride.fatherName}
-                    </p>
 
-                    {coupleInfo.bride.instagram && (
-                      <a
-                        href={`https://instagram.com/${coupleInfo.bride.instagram}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="profile-ig-btn"
-                        title={`Instagram ${coupleInfo.bride.fullName}`}
-                      >
-                        <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
-                          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                        </svg>
-                        <span>@{coupleInfo.bride.instagram}</span>
-                      </a>
-                    )}
+                    <div className="profile-details">
+                      <h3 className="profile-name">{coupleInfo.bride.fullName}</h3>
+                      <div className="lineage-box">
+                        <span className="lineage-relation">{coupleInfo.bride.relation}</span>
+                        <div className="lineage-parents">
+                          <p className="parent-line">{coupleInfo.bride.fatherName}</p>
+                          <p className="parent-line">dan {coupleInfo.bride.motherName}</p>
+                        </div>
+                      </div>
+
+                      {coupleInfo.bride.instagram && (
+                        <a
+                          href={`https://instagram.com/${coupleInfo.bride.instagram}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="profile-ig-btn"
+                          title={`Instagram ${coupleInfo.bride.fullName}`}
+                        >
+                          <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                          </svg>
+                          <span>@{coupleInfo.bride.instagram}</span>
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
 
           {/* 2. FLIP CLOCK (Hitung mundur) */}
           <section className="section-padding reveal-on-scroll">
@@ -574,23 +679,13 @@ export default function Invitation() {
 
               <div className="flip-clock-card">
                 <h2 className="section-title">Simpan Tanggalnya</h2>
-                <div className="date-highlight">Minggu, 30 Agustus 2026</div>
+                <div className="date-highlight">Sabtu, 26 September 2026</div>
                 <div className="flip-clock-board">
                   {["days", "hours", "minutes", "seconds"].map((unit) => (
                     <div key={unit} className="flip-group">
                       <div className="flip-pair">
-                        <div className="flip-card-digit">
-                          <span>{timeLeft[unit][0]}</span>
-                          <div className="card-line"></div>
-                          <div className="pin left"></div>
-                          <div className="pin right"></div>
-                        </div>
-                        <div className="flip-card-digit">
-                          <span>{timeLeft[unit][1]}</span>
-                          <div className="card-line"></div>
-                          <div className="pin left"></div>
-                          <div className="pin right"></div>
-                        </div>
+                        <FlipDigit digit={timeLeft[unit][0]} />
+                        <FlipDigit digit={timeLeft[unit][1]} />
                       </div>
                       <div className="clock-label">
                         {unit === "days"
@@ -603,6 +698,41 @@ export default function Invitation() {
                       </div>
                     </div>
                   ))}
+                </div>
+
+                {/* Jadwal Rangkaian Acara (Akad & Resepsi) */}
+                <div className="event-schedule-container">
+                  <div className="schedule-divider">
+                    <div className="schedule-divider-line"></div>
+                    <div className="schedule-divider-diamond">✦</div>
+                    <div className="schedule-divider-line"></div>
+                  </div>
+
+                  <div className="schedule-grid">
+                    {/* Akad Nikah */}
+                    <div className="schedule-item">
+                      <div className="schedule-badge">Akad Nikah</div>
+                      <div className="schedule-time">
+                        <svg className="schedule-clock-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10" />
+                          <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                        <span>09:00 WIB - SELESAI</span>
+                      </div>
+                    </div>
+
+                    {/* Resepsi Nikah */}
+                    <div className="schedule-item">
+                      <div className="schedule-badge">Resepsi Nikah</div>
+                      <div className="schedule-time">
+                        <svg className="schedule-clock-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10" />
+                          <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                        <span>11:00 WIB - 17:00 WIB</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -622,20 +752,32 @@ export default function Invitation() {
               <div className="map-responsive">
                 <iframe
                   title="Google Maps Location"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.521260322283!2d106.81956135000001!3d-6.194741399999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5390917b759%3A0x6b45e6782db50a81!2sGrand%20Hyatt%20Jakarta!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.6429368232684!2d106.62292377499327!3d-6.566671893426604!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69d9b63b711aeb%3A0x8088d78f2ceee1b7!2sSaung%20Abah%20BTN!5e0!3m2!1sid!2sid!4v1789050302248!5m2!1sid!2sid"
                   width="100%"
-                  height="240"
+                  height="260"
                   style={{ border: 0 }}
                   allowFullScreen=""
                   loading="lazy"
+                  referrerPolicy="strict-origin-when-cross-origin"
                 ></iframe>
               </div>
               <div className="address-details">
-                <h3>Grand Ballroom Hotel</h3>
+                <h3>Saung Abah BTN</h3>
                 <p>
-                  Jl. M.H. Thamrin No.28-30, Gondangdia, Kec. Menteng, Jakarta
-                  Pusat
+                  Cibeber I, Kec. Leuwiliang, Kabupaten Bogor, Jawa Barat
                 </p>
+                <a
+                  href="https://maps.google.com/?q=Saung+Abah+BTN"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="open-map-btn"
+                  title="Buka Rute di Google Maps"
+                >
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                  </svg>
+                  <span>Buka Google Maps</span>
+                </a>
               </div>
             </div>
           </section>
@@ -949,7 +1091,7 @@ export default function Invitation() {
                   <div
                     key={photo.id}
                     className="gallery-item"
-                    onClick={() => setSelectedPhotoIndex(index)}
+                    onClick={() => handleOpen3DCard(index)}
                   >
                     <div className="gallery-frame-outer">
                       <div className="gallery-img-wrapper">
@@ -971,12 +1113,12 @@ export default function Invitation() {
                               strokeLinecap="round"
                               strokeLinejoin="round"
                             >
-                              <circle cx="11" cy="11" r="8" />
-                              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                              <line x1="11" y1="8" x2="11" y2="14" />
-                              <line x1="8" y1="11" x2="14" y2="11" />
+                              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                              <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                              <line x1="12" y1="22.08" x2="12" y2="12" />
                             </svg>
                           </div>
+                          <span className="gallery-view-hint">Sentuh untuk 3D</span>
                         </div>
                       </div>
                     </div>
@@ -986,51 +1128,163 @@ export default function Invitation() {
             </div>
           </section>
 
-          {/* LIGHTBOX MODAL PREVIEW */}
+          {/* 3D PARALLAX PHOTO CARD MODAL */}
           {selectedPhotoIndex !== null && (
             <div
-              className="gallery-lightbox-backdrop"
-              onClick={() => setSelectedPhotoIndex(null)}
+              className="gallery-3d-backdrop"
+              onClick={handleClose3DCard}
             >
+              {/* Top Navigation Bar with Prominent Back Button */}
               <div
-                className="gallery-lightbox-modal"
+                className="gallery-3d-topbar"
                 onClick={(e) => e.stopPropagation()}
               >
                 <button
                   type="button"
-                  className="lightbox-close-btn"
-                  onClick={() => setSelectedPhotoIndex(null)}
-                  title="Tutup (Esc)"
+                  className="gallery-3d-back-btn"
+                  onClick={handleClose3DCard}
+                  title="Kembali ke Halaman Undangan"
                 >
-                  ✕
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                  </svg>
+                  <span>Kembali</span>
                 </button>
 
-                <div className="lightbox-image-container">
-                  <img
-                    src={galleryPhotos[selectedPhotoIndex].src}
-                    alt={galleryPhotos[selectedPhotoIndex].alt}
-                    className="lightbox-active-img"
-                  />
+                <div className="gallery-3d-hint-badge">
+                  <span className="hint-hand-icon">🖐️</span>
+                  <span>Seret foto untuk putar 3D</span>
                 </div>
 
-                <div className="lightbox-info">
-                  <span className="lightbox-tag">Galeri Foto</span>
-                  <div className="lightbox-counter">
-                    {selectedPhotoIndex + 1} / {galleryPhotos.length}
+                <div className="gallery-3d-top-actions">
+                  <button
+                    type="button"
+                    className="gallery-3d-btn-pill flip-btn"
+                    onClick={handleFlipCard}
+                    title="Balik Sisi Depan / Belakang"
+                  >
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                    </svg>
+                    <span>Balik Kartu</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="gallery-3d-close-btn"
+                    onClick={handleClose3DCard}
+                    title="Tutup (Esc)"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+
+              {/* 3D Interactive Stage */}
+              <div
+                className="gallery-3d-stage"
+                onClick={(e) => e.stopPropagation()}
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+                onPointerCancel={handlePointerUp}
+              >
+                <div
+                  className={`gallery-3d-card ${isDragging ? "is-dragging" : ""}`}
+                  style={{
+                    transform: `rotateX(${rotX}deg) rotateY(${rotY}deg)`,
+                  }}
+                >
+                  {/* SISI DEPAN (FOTO PERNIKAHAN DENGAN BINGKAI KERTAS ARTISTIK) */}
+                  <div className="gallery-card-face card-front">
+                    <div className="card-front-inner">
+                      <div className="card-photo-box">
+                        <img
+                          src={galleryPhotos[selectedPhotoIndex].src}
+                          alt={galleryPhotos[selectedPhotoIndex].alt}
+                          className="card-photo-img"
+                          draggable="false"
+                        />
+                        <div className="card-sheen-highlight"></div>
+                      </div>
+                      <div className="card-front-caption">
+                        <div className="card-caption-decor">✦ • ✤ • ✦</div>
+                        <div className="card-caption-names">M. Dzikri Fauzan &amp; Resa Erviana</div>
+                        <div className="card-caption-sub">The Wedding • 26 September 2026</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* SISI BELAKANG (TULISAN SAMBUNG ELEGAN NAMA KEDUA MEMPELAI) */}
+                  <div className="gallery-card-face card-back">
+                    <div className="card-back-texture">
+                      <div className="card-back-inner-frame">
+                        <div className="card-back-corner tl">❧</div>
+                        <div className="card-back-corner tr">❧</div>
+                        <div className="card-back-corner bl">❧</div>
+                        <div className="card-back-corner br">❧</div>
+
+                        <div className="card-back-subhead">The Wedding of</div>
+
+                        {/* TULISAN SAMBUNG BESAR & ANGGUN */}
+                        <div className="card-back-cursive-title">
+                          M. Dzikri Fauzan
+                        </div>
+                        <div className="card-back-cursive-amp">&amp;</div>
+                        <div className="card-back-cursive-title">
+                          Resa Erviana
+                        </div>
+
+                        <div className="card-back-quote-divider">
+                          <span className="card-divider-line"></span>
+                          <span className="card-divider-gem">✦</span>
+                          <span className="card-divider-line"></span>
+                        </div>
+
+                        <p className="card-back-quote-text">
+                          “Setiap kisah cinta itu indah, namun kisah cinta kami adalah yang paling kami syukuri.”
+                        </p>
+
+                        <div className="card-back-monogram-seal">
+                          <div className="monogram-wax">
+                            <span className="monogram-initials">D &amp; R</span>
+                          </div>
+                        </div>
+
+                        <div className="card-back-date-text">
+                          26 • 09 • 2026
+                        </div>
+
+                        <div className="card-back-drag-tip">
+                          ↺ Seret kembali untuk melihat foto
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
+              </div>
 
+              {/* Bottom Photo Navigation & Counter */}
+              <div
+                className="gallery-3d-bottom-controls"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <button
                   type="button"
-                  className="lightbox-nav-btn prev"
+                  className="gallery-3d-nav-btn prev"
                   onClick={handlePrevPhoto}
                   title="Foto Sebelumnya (←)"
                 >
                   ‹
                 </button>
+
+                <div className="gallery-3d-counter">
+                  {selectedPhotoIndex + 1} / {galleryPhotos.length}
+                </div>
+
                 <button
                   type="button"
-                  className="lightbox-nav-btn next"
+                  className="gallery-3d-nav-btn next"
                   onClick={handleNextPhoto}
                   title="Foto Selanjutnya (→)"
                 >
@@ -1101,11 +1355,11 @@ export default function Invitation() {
           >
             <div className="floating-vinyl-record">
               <img
-                src="/images/Tulus.jpg"
+                src="/images/bermuara.jpg"
                 onError={(e) => {
                   e.target.src = "/images/bg.jpg";
                 }}
-                alt="Music Cover"
+                alt="Music Cover Bermuara"
                 className="floating-vinyl-cover"
               />
               <div className="floating-vinyl-center"></div>
