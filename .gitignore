@@ -11,6 +11,7 @@ backend/db/data/
 **/.env
 **/.env.*
 !**/.env.example
+!frontend/.env.production
 
 # Build directories
 dist/
