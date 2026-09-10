@@ -60,6 +60,24 @@ export default function Invitation() {
     }
   ];
 
+  // Data Profil Kedua Mempelai (Nama Orang Tua)
+  const coupleInfo = {
+    groom: {
+      fullName: "Muhammad Dzikri Fauzan",
+      fatherName: "Breza Artha Medico",
+      role: "Mempelai Pria",
+      photo: "/images/dzikri.jpg",
+      instagram: "dzikrifauzan",
+    },
+    bride: {
+      fullName: "Resa Erviana",
+      fatherName: "Halipah Mubarok",
+      role: "Mempelai Wanita",
+      photo: "/images/resa.jpg",
+      instagram: "resaerviana",
+    },
+  };
+
   // State untuk notifikasi "Berhasil Disalin" pada Wedding Gift
   const [copiedTarget, setCopiedTarget] = useState("");
   const [showGiftDetails, setShowGiftDetails] = useState(false);
@@ -423,15 +441,124 @@ export default function Invitation() {
 
           {/* BACKGROUND MOTIF BERULANG DI BAWAH JUMBOTRON & GRADASI */}
           <div className="invitation-body-pattern">
-            {/* 1b. QURAN VERSE SECTION (Kutipan QS. Ar-Rum: 21) */}
-            <section className="quote-section reveal-on-scroll">
-            <div className="quote-container">
-              <h2 className="section-title">Tentang Cinta yang Menenangkan</h2>
-              <p className="quote-text">
-                "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya diantaramu rasa kasih dan sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda bagi kaum yang berfikir."
-              </p>
-              <div className="quote-source">
-                (QS. Ar-Rum Ayat 21)
+            {/* 1b. QURAN VERSE & INFORMASI KEDUA MEMPELAI (CONTAINER TERSATU) */}
+            <section className="section-padding couple-section reveal-on-scroll">
+              <div className="couple-card-container">
+                {/* Bagian Ayat QS. Ar-Rum: 21 (Rapi, Anggun & Bersih) */}
+                <div className="quote-block">
+                  <div className="quote-badge">QS. Ar-Rum : 21</div>
+                  <h3 className="quote-subtitle">Tentang Cinta yang Menenangkan</h3>
+                  
+                  <div className="quote-text-wrapper">
+                    <span className="quote-mark open">“</span>
+                    <p className="quote-text">
+                      Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya diantaramu rasa kasih dan sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda bagi kaum yang berfikir.
+                    </p>
+                    <span className="quote-mark close">”</span>
+                  </div>
+                </div>
+
+                {/* Ornamen Pemisah Menuju Profil Mempelai */}
+                <div className="section-divider-ornament">
+                  <div className="section-divider-line"></div>
+                  <div className="divider-diamond">✦</div>
+                  <div className="section-divider-line"></div>
+                </div>
+
+                {/* Header Mempelai */}
+                <div className="couple-header">
+                  <span className="couple-badge">The Happy Couple</span>
+                  <h2 className="section-title couple-title">Kedua Mempelai</h2>
+                </div>
+
+                {/* Grid Profil Mempelai */}
+                <div className="couple-grid">
+                {/* Mempelai Pria */}
+                <div className="profile-card groom-card">
+                  <div className="profile-photo-wrapper">
+                    <div className="profile-photo-frame">
+                      <img
+                        src={coupleInfo.groom.photo}
+                        alt={coupleInfo.groom.fullName}
+                        className="profile-photo"
+                      />
+                    </div>
+                    <span className="role-pill">{coupleInfo.groom.role}</span>
+                  </div>
+
+                  <div className="profile-details">
+                    <h3 className="profile-name">{coupleInfo.groom.fullName}</h3>
+                    <div className="lineage-bin">
+                      Bin {coupleInfo.groom.fatherName}
+                    </div>
+                    <p className="lineage-desc">
+                      Putra dari Bapak {coupleInfo.groom.fatherName}
+                    </p>
+
+                    {coupleInfo.groom.instagram && (
+                      <a
+                        href={`https://instagram.com/${coupleInfo.groom.instagram}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="profile-ig-btn"
+                        title={`Instagram ${coupleInfo.groom.fullName}`}
+                      >
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                        <span>@{coupleInfo.groom.instagram}</span>
+                      </a>
+                    )}
+                  </div>
+                </div>
+
+                {/* Ornamen Penghubung Tengah Romantis */}
+                <div className="couple-center-divider">
+                  <div className="divider-ornament-line"></div>
+                  <div className="couple-ampersand-badge">
+                    <span className="ampersand-char">&</span>
+                  </div>
+                  <div className="divider-ornament-line"></div>
+                </div>
+
+                {/* Mempelai Wanita */}
+                <div className="profile-card bride-card">
+                  <div className="profile-photo-wrapper">
+                    <div className="profile-photo-frame">
+                      <img
+                        src={coupleInfo.bride.photo}
+                        alt={coupleInfo.bride.fullName}
+                        className="profile-photo"
+                      />
+                    </div>
+                    <span className="role-pill">{coupleInfo.bride.role}</span>
+                  </div>
+
+                  <div className="profile-details">
+                    <h3 className="profile-name">{coupleInfo.bride.fullName}</h3>
+                    <div className="lineage-bin">
+                      Binti {coupleInfo.bride.fatherName}
+                    </div>
+                    <p className="lineage-desc">
+                      Putri dari Bapak {coupleInfo.bride.fatherName}
+                    </p>
+
+                    {coupleInfo.bride.instagram && (
+                      <a
+                        href={`https://instagram.com/${coupleInfo.bride.instagram}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="profile-ig-btn"
+                        title={`Instagram ${coupleInfo.bride.fullName}`}
+                      >
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                        <span>@{coupleInfo.bride.instagram}</span>
+                      </a>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </section>

@@ -296,82 +296,438 @@
 .arrow-down { font-size: 1.2rem; margin-top: 5px; }
 
 /* =========================================
-   KUTIPAN AYAT SUCI (QURAN VERSE SECTION)
+   CONTAINER TERSATU: AYAT & KEDUA MEMPELAI
 ========================================= */
-.quote-section {
-    padding: 70px 24px 45px 24px;
-    background-color: transparent; /* Transparan agar motif background berulang terlihat indah */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.couple-section {
+    padding: 35px 20px 50px 20px;
+    max-width: 620px;
+    margin: 0 auto;
+    text-align: center;
     box-sizing: border-box;
 }
 
-.quote-container {
-    max-width: 580px;
-    width: 100%;
-    text-align: center;
+.couple-card-container {
     background: #ffffff;
     border: 2px solid #e0d5c1;
-    border-radius: 20px;
-    padding: 40px 30px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    border-radius: 24px;
+    padding: 42px 28px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.04);
     position: relative;
     z-index: 5;
     box-sizing: border-box;
 }
 
-.quote-ornament {
+/* Bagian Ayat Ar-Rum: 21 (Rapi, Anggun & Bersih) */
+.quote-block {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    margin: 10px 0;
+    text-align: center;
+    margin-bottom: 6px;
 }
 
-.quote-ornament.top {
-    margin-bottom: 25px;
+.quote-badge {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2.2px;
+    text-transform: uppercase;
+    color: #c29b62;
+    background: #faf4e8;
+    border: 1px solid #ebdcc5;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    display: inline-block;
 }
 
-.quote-ornament.bottom {
-    margin-top: 25px;
+.quote-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    color: #2c2523;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    margin: 0 0 16px 0;
+}
+
+/* Kotak Sorotan Ayat (Quote Highlight Box) */
+.quote-text-wrapper {
+    background: #faf8f5;
+    border: 1px solid #ece3d3;
+    border-radius: 16px;
+    padding: 22px 26px;
+    max-width: 520px;
+    width: 100%;
+    position: relative;
+    box-sizing: border-box;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.quote-mark {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    line-height: 1;
+    color: #c29b62;
+    opacity: 0.4;
+    display: block;
+    user-select: none;
+}
+
+.quote-mark.open {
+    text-align: left;
+    margin-bottom: -15px;
+}
+
+.quote-mark.close {
+    text-align: right;
+    margin-top: -10px;
 }
 
 .quote-text {
     font-family: 'Playfair Display', serif;
-    font-size: 1.05rem;
+    font-size: 0.96rem;
     font-style: italic;
     color: #4a3e3d;
     line-height: 1.8;
     margin: 0;
+    padding: 0 4px;
     letter-spacing: 0.2px;
 }
 
-.quote-source {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: #c29b62;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-top: 20px;
-    display: inline-block;
+/* Ornamen Pemisah Menuju Profil Mempelai (Tepat di atas "The Happy Couple") */
+.section-divider-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 150px;
+    margin: 24px auto 22px auto;
 }
 
-/* Responsivitas Layar HP */
+.section-divider-line {
+    flex: 1;
+    height: 1px;
+    background: #d8ccb8;
+    opacity: 0.8;
+}
+
+.divider-diamond {
+    color: #c29b62;
+    font-size: 0.75rem;
+    line-height: 1;
+    opacity: 0.9;
+}
+
+/* Header Mempelai */
+.couple-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.couple-badge {
+    display: inline-block;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #c29b62;
+    margin-bottom: 4px;
+}
+
+.couple-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.65rem;
+    color: #2c2523;
+    margin-bottom: 0;
+}
+
+/* Grid Dua Profil */
+.couple-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+/* Card Masing-masing Pengantin */
+.profile-card {
+    background: #faf8f5;
+    border: 1.5px solid #ece3d3;
+    border-radius: 20px;
+    padding: 30px 24px 26px 24px;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+    position: relative;
+}
+
+.profile-card:hover {
+    transform: translateY(-4px);
+    border-color: #c29b62;
+    box-shadow: 0 12px 28px rgba(194, 155, 98, 0.16);
+    background: #ffffff;
+}
+
+/* Bingkai Foto Bentuk Kubah (Arch Dome) Estetik */
+.profile-photo-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.profile-photo-frame {
+    width: 150px;
+    height: 185px;
+    border-radius: 85px 85px 18px 18px;
+    overflow: hidden;
+    border: 3px solid #ffffff;
+    box-shadow: 0 0 0 1.5px #c29b62, 0 10px 24px rgba(44, 37, 35, 0.15);
+    background: #ece3d3;
+    position: relative;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.profile-card:hover .profile-photo-frame {
+    transform: scale(1.03);
+    box-shadow: 0 0 0 2px #c29b62, 0 14px 30px rgba(194, 155, 98, 0.28);
+}
+
+.profile-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.profile-card:hover .profile-photo {
+    transform: scale(1.08);
+}
+
+/* Badge Role (Pria / Wanita) */
+.role-pill {
+    background: #2c2523;
+    color: #fdfbf7;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-top: -10px;
+    margin-bottom: 15px;
+    border: 1px solid #c29b62;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+    position: relative;
+    z-index: 2;
+}
+
+/* Detail Nama & Silsilah */
+.profile-details {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: #2c2523;
+    margin-bottom: 5px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.lineage-bin {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #c29b62;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.lineage-desc {
+    font-size: 0.82rem;
+    color: #776e65;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    max-width: 280px;
+}
+
+/* Tombol Profil Instagram */
+.profile-ig-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: #ffffff;
+    border: 1px solid #dcd2c0;
+    color: #4a3f35;
+    padding: 7px 18px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-family: inherit;
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.profile-card:hover .profile-ig-btn {
+    border-color: #c29b62;
+    background: #faf8f5;
+}
+
+.profile-ig-btn:hover {
+    background: #2c2523 !important;
+    color: #ffffff !important;
+    border-color: #2c2523 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(44, 37, 35, 0.25);
+}
+
+/* Ornamen Penghubung Tengah (Ampersand & Lines) */
+.couple-center-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    width: 100%;
+    margin: 4px 0;
+}
+
+.couple-center-divider .divider-ornament-line {
+    flex: 1;
+    height: 1.5px;
+    background: linear-gradient(to right, transparent, rgba(194, 155, 98, 0.45), transparent);
+}
+
+.couple-ampersand-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1.5px solid #e0d5c1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(194, 155, 98, 0.15);
+    flex-shrink: 0;
+}
+
+.ampersand-char {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2rem;
+    color: #c29b62;
+    line-height: 1;
+    margin-top: -2px;
+}
+
+/* Responsivitas Desktop (Side-by-side Layout) */
+@media (min-width: 600px) {
+    .couple-grid {
+        flex-direction: row;
+        justify-content: center;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .profile-card {
+        flex: 1;
+        max-width: 250px;
+        padding: 26px 16px 22px 16px;
+    }
+
+    .profile-photo-frame {
+        width: 130px;
+        height: 165px;
+        border-radius: 75px 75px 16px 16px;
+    }
+
+    .profile-name {
+        font-size: 1.22rem;
+    }
+
+    .couple-center-divider {
+        flex-direction: column;
+        width: auto;
+        gap: 8px;
+        align-self: center;
+    }
+
+    .couple-center-divider .divider-ornament-line {
+        width: 1.5px;
+        height: 50px;
+        background: linear-gradient(to bottom, transparent, rgba(194, 155, 98, 0.45), transparent);
+    }
+}
+
+/* Responsivitas HP Mobile */
 @media (max-width: 480px) {
-    .quote-section {
-        padding: 50px 16px 30px 16px;
+    .couple-section {
+        padding: 20px 14px 40px 14px;
     }
-    .quote-container {
-        padding: 30px 20px;
+
+    .couple-card-container {
+        padding: 28px 16px;
+        border-radius: 20px;
     }
+
+    .quote-subtitle {
+        font-size: 1.15rem;
+    }
+
+    .quote-text-wrapper {
+        padding: 16px 18px;
+    }
+
     .quote-text {
-        font-size: 0.92rem;
+        font-size: 0.86rem;
         line-height: 1.7;
     }
-    .quote-source {
-        font-size: 0.75rem;
-        letter-spacing: 1.5px;
+
+    .quote-mark {
+        font-size: 2rem;
+    }
+
+    .section-divider-ornament {
+        max-width: 130px;
+        margin: 18px auto 16px auto;
+    }
+
+    .couple-title {
+        font-size: 1.4rem;
+    }
+
+    .profile-card {
+        padding: 24px 16px 20px 16px;
+    }
+
+    .profile-photo-frame {
+        width: 130px;
+        height: 162px;
+    }
+
+    .profile-name {
+        font-size: 1.22rem;
+    }
+
+    .lineage-bin {
+        font-size: 0.88rem;
+    }
+
+    .lineage-desc {
+        font-size: 0.78rem;
     }
 }
 
