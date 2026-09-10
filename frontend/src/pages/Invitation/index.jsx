@@ -1,28 +1,33 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import API_BASE_URL from "../../config/api";
 import "./Invitation.css";
 import { formatGuestName } from "../../lib/formatGuestName";
 
 // Komponen Kartu Digit Animasi 3D Flip (Angka Utuh, Jelas & Tanpa Garis Pembatas Tengah)
 function FlipDigit({ digit }) {
+  const [prevDigit, setPrevDigit] = useState(digit);
   const [displayDigit, setDisplayDigit] = useState(digit);
   const [nextDigit, setNextDigit] = useState(digit);
   const [isFlipping, setIsFlipping] = useState(false);
 
-  useEffect(() => {
-    if (digit !== displayDigit) {
-      setNextDigit(digit);
-      setIsFlipping(true);
+  if (digit !== prevDigit) {
+    setPrevDigit(digit);
+    setNextDigit(digit);
+    setIsFlipping(true);
+  }
 
+  useEffect(() => {
+    if (isFlipping) {
       const timer = setTimeout(() => {
-        setDisplayDigit(digit);
+        setDisplayDigit(nextDigit);
         setIsFlipping(false);
       }, 380);
 
       return () => clearTimeout(timer);
     }
-  }, [digit, displayDigit]);
+  }, [isFlipping, nextDigit]);
 
   return (
     <div className="flip-card-digit">
@@ -56,8 +61,6 @@ export default function Invitation() {
   // State Music Player
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
 
   // State Countdown Timer
   const [timeLeft, setTimeLeft] = useState({
@@ -98,16 +101,16 @@ export default function Invitation() {
   const coupleInfo = {
     bride: {
       fullName: "Resa Erviana, S.Pd.",
-      role: "Mempelai Wanita",
+      role: "The Bride",
       photo: "/images/resa.png",
       instagram: "ressaerv",
-      relation: "Putri terakhir dari",
+      relation: "Putri bungsu dari",
       fatherName: "Bapak H. Abdul Hamid, S.Pd.I. (Almarhum)",
       motherName: "Ibu Hj. Iom Romsyah",
     },
     groom: {
       fullName: "Muhamad Dzikri Fauzan, S.Kom., Gr.",
-      role: "Mempelai Pria",
+      role: "The Groom",
       photo: "/images/dzikri.png",
       instagram: "dzikri_fauzan11",
       relation: "Putra ketiga dari",
@@ -152,32 +155,32 @@ export default function Invitation() {
     setRotY(0);
   };
 
-  const handleClose3DCard = () => {
+  const handleClose3DCard = useCallback(() => {
     setSelectedPhotoIndex(null);
     setRotX(0);
     setRotY(0);
     setIsDragging(false);
-  };
+  }, []);
 
-  const handleFlipCard = (e) => {
-    if (e) e.stopPropagation();
+  const handleFlipCard = useCallback((e) => {
+    if (e && e.stopPropagation) e.stopPropagation();
     setRotY((prev) => {
       const normalized = Math.round(prev / 180) * 180;
       return normalized % 360 === 0 ? normalized + 180 : normalized - 180;
     });
-  };
+  }, []);
 
-  const handleNextPhoto = (e) => {
-    if (e) e.stopPropagation();
+  const handleNextPhoto = useCallback((e) => {
+    if (e && e.stopPropagation) e.stopPropagation();
     setRotX(0);
     setRotY(0);
     setSelectedPhotoIndex((prev) =>
       prev !== null ? (prev + 1) % galleryPhotos.length : null,
     );
-  };
+  }, [galleryPhotos.length]);
 
-  const handlePrevPhoto = (e) => {
-    if (e) e.stopPropagation();
+  const handlePrevPhoto = useCallback((e) => {
+    if (e && e.stopPropagation) e.stopPropagation();
     setRotX(0);
     setRotY(0);
     setSelectedPhotoIndex((prev) =>
@@ -185,7 +188,7 @@ export default function Invitation() {
         ? (prev - 1 + galleryPhotos.length) % galleryPhotos.length
         : null,
     );
-  };
+  }, [galleryPhotos.length]);
 
   const handlePointerDown = (e) => {
     if (e.button !== undefined && e.button !== 0) return;
@@ -198,7 +201,9 @@ export default function Invitation() {
     };
     try {
       e.currentTarget.setPointerCapture(e.pointerId);
-    } catch (err) {}
+    } catch {
+      // Abaikan jika browser tidak mendukung pointer capture
+    }
   };
 
   const handlePointerMove = (e) => {
@@ -219,7 +224,9 @@ export default function Invitation() {
       setIsDragging(false);
       try {
         e.currentTarget.releasePointerCapture(e.pointerId);
-      } catch (err) {}
+      } catch {
+        // Abaikan jika pointer capture gagal dilepas
+      }
     }
   };
 
@@ -233,22 +240,22 @@ export default function Invitation() {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedPhotoIndex]);
+  }, [selectedPhotoIndex, handleClose3DCard, handleNextPhoto, handlePrevPhoto, handleFlipCard]);
 
   // State Komentar / Buku Tamu
   const [showAllComments, setShowAllComments] = useState(false);
   const [comments, setComments] = useState([]);
 
   const flowers = useMemo(() => {
-    // Variasi ukuran bunga bervariasi dari 10px (kecil halus) hingga 36px (besar anggun)
-    const sizes = [10, 14, 18, 22, 26, 32, 12, 16, 20, 24, 30, 36];
-    const opacities = [0.4, 0.55, 0.65, 0.75, 0.5, 0.6, 0.7];
+    // Variasi kelopak bunga dibuat lebih sedikit, berukuran kecil halus & elegan agar tidak ramai
+    const sizes = [8, 11, 13, 10, 12, 9, 14, 11, 10, 12];
+    const opacities = [0.22, 0.32, 0.28, 0.35, 0.25, 0.3];
 
-    return Array.from({ length: 32 }).map((_, i) => ({
+    return Array.from({ length: 12 }).map((_, i) => ({
       id: i,
-      left: `${(i * 3.125 + (i % 5) * 1.8) % 96}%`,
-      duration: `${8 + (i % 6) * 2}s`,
-      delay: `${(i * 0.45) % 9}s`,
+      left: `${(i * 8.2 + (i % 3) * 2.4) % 94}%`,
+      duration: `${10 + (i % 4) * 2.5}s`,
+      delay: `${(i * 0.75) % 8}s`,
       size: `${sizes[i % sizes.length]}px`,
       opacity: opacities[i % opacities.length],
       swayClass: i % 2 === 0 ? "sway-left" : "sway-right",
@@ -257,23 +264,24 @@ export default function Invitation() {
 
   // 1. Fetch Data & Komentar dari Database Backend
   useEffect(() => {
+    let isMounted = true;
     const fetchData = async () => {
       if (slug) {
         setIsLoadingGuest(true);
         try {
           const resGuest = await axios.get(
-            `http://localhost:5000/api/guests/${slug}`,
+            `${API_BASE_URL}/api/guests/${slug}`,
           );
-          if (resGuest.data?.name) {
+          if (isMounted && resGuest.data?.name) {
             setGuestName(resGuest.data.name);
             setRsvpName(resGuest.data.name);
           }
-        } catch (error) {
+        } catch {
           console.error("Gagal load tamu.");
         } finally {
           // Berikan jeda halus agar transisi loading terasa mulus & tidak berkedip instan
           setTimeout(() => {
-            setIsLoadingGuest(false);
+            if (isMounted) setIsLoadingGuest(false);
           }, 350);
         }
       } else {
@@ -281,13 +289,18 @@ export default function Invitation() {
       }
 
       try {
-        const resComments = await axios.get(`http://localhost:5000/api/rsvp`);
-        setComments(resComments.data);
-      } catch (error) {
+        const resComments = await axios.get(`${API_BASE_URL}/api/rsvp`);
+        if (isMounted) {
+          setComments(resComments.data);
+        }
+      } catch {
         console.log("Menunggu backend dijalankan untuk load data komentar...");
       }
     };
     fetchData();
+    return () => {
+      isMounted = false;
+    };
   }, [slug]);
 
   const sortedComments = useMemo(() => {
@@ -343,36 +356,96 @@ export default function Invitation() {
           }
         });
       },
-      { threshold: 0.15 },
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" },
     );
     const elements = document.querySelectorAll(".reveal-on-scroll");
     elements.forEach((el) => observer.observe(el));
     return () => elements.forEach((el) => observer.unobserve(el));
   }, [showMainContent, comments]);
 
+  // Teks Ayat QS. Ar-Rum: 21 dipecah per kata untuk animasi scroll reveal
+  const arRumWords = useMemo(() => {
+    const text =
+      "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya diantaramu rasa kasih dan sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda bagi kaum yang berfikir.";
+    return text.split(" ");
+  }, []);
+
+  const quoteRef = useRef(null);
+  const [revealedWordCount, setRevealedWordCount] = useState(0);
+
+  // 3b. Animasi Scroll: Satu per satu kata ayat Ar-Rum otomatis berwarna gelap secara berurutan
+  useEffect(() => {
+    if (!showMainContent) return;
+
+    let autoTimer = null;
+    let hasAutoTriggered = false;
+
+    const handleVerseScroll = () => {
+      if (!quoteRef.current) return;
+      const rect = quoteRef.current.getBoundingClientRect();
+      const windowHeight =
+        window.innerHeight || document.documentElement.clientHeight;
+
+      // Jarak mulai & selesai animasi scroll
+      const startY = windowHeight * 0.85; // mulai saat mendekati bawah layar
+      const endY = windowHeight * 0.32;   // selesai saat mendekati atas layar
+      const totalDist = startY - endY;
+      const currentDist = startY - rect.top;
+      const progress = Math.min(1, Math.max(0, currentDist / totalDist));
+
+      const scrollWordTarget = Math.round(progress * arRumWords.length);
+      setRevealedWordCount((prev) => Math.max(prev, scrollWordTarget));
+
+      // Jika sudah masuk ke area baca (tengah layar), jalankan auto-reveal berurutan kata demi kata
+      if (rect.top <= windowHeight * 0.72 && rect.bottom >= windowHeight * 0.15) {
+        if (!hasAutoTriggered) {
+          hasAutoTriggered = true;
+          if (autoTimer) clearInterval(autoTimer);
+          autoTimer = setInterval(() => {
+            setRevealedWordCount((prev) => {
+              if (prev >= arRumWords.length) {
+                clearInterval(autoTimer);
+                return arRumWords.length;
+              }
+              return prev + 1;
+            });
+          }, 55);
+        }
+      } else if (rect.top > windowHeight * 0.95) {
+        // Reset jika di-scroll kembali ke paling atas
+        hasAutoTriggered = false;
+        if (autoTimer) clearInterval(autoTimer);
+        setRevealedWordCount(0);
+      }
+    };
+
+    const wrapper = document.querySelector(".invitation-wrapper");
+    if (wrapper) {
+      wrapper.addEventListener("scroll", handleVerseScroll, { passive: true });
+    }
+    window.addEventListener("scroll", handleVerseScroll, { passive: true });
+
+    // Panggil sekali untuk sinkronisasi posisi saat ini
+    handleVerseScroll();
+
+    return () => {
+      if (wrapper) {
+        wrapper.removeEventListener("scroll", handleVerseScroll);
+      }
+      window.removeEventListener("scroll", handleVerseScroll);
+      if (autoTimer) clearInterval(autoTimer);
+    };
+  }, [showMainContent, arRumWords.length]);
+
   // 4. Control Musik
   const togglePlay = () => {
     if (!audioRef.current) return;
-    if (isPlaying) audioRef.current.pause();
-    else audioRef.current.play().catch((e) => console.log(e));
-    setIsPlaying(!isPlaying);
-  };
-  const handleTimeUpdate = () => {
-    if (audioRef.current) {
-      setCurrentTime(audioRef.current.currentTime);
-      setDuration(audioRef.current.duration || 0);
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play().catch((e) => console.log(e));
     }
-  };
-  const handleSeek = (e) => {
-    const seekTime = (e.target.value / 100) * duration;
-    audioRef.current.currentTime = seekTime;
-    setCurrentTime(seekTime);
-  };
-  const formatTime = (time) => {
-    if (isNaN(time)) return "00:00";
-    const m = Math.floor(time / 60);
-    const s = Math.floor(time % 60);
-    return `${m < 10 ? "0" : ""}${m}:${s < 10 ? "0" : ""}${s}`;
+    setIsPlaying(!isPlaying);
   };
 
   // 5. Buka Amplop & Autoplay Music
@@ -416,7 +489,7 @@ export default function Invitation() {
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/rsvp`,
+        `${API_BASE_URL}/api/rsvp`,
         payload,
       );
       setComments((prev) => [
@@ -440,8 +513,6 @@ export default function Invitation() {
       <audio
         ref={audioRef}
         src="/music/wedding-song.mp3"
-        onTimeUpdate={handleTimeUpdate}
-        onLoadedMetadata={handleTimeUpdate}
         loop
       />
 
@@ -477,7 +548,7 @@ export default function Invitation() {
                 <div id="envelope-back"></div>
                 <div id="paper" className={isPaperUp ? "slide-up-paper" : ""}>
                   <div className="paper-content">
-                    <h2>Simpan Tanggalnya</h2>
+                    <h2>Save The Date</h2>
                     <p>Sabtu, 26 September 2026</p>
                   </div>
                 </div>
@@ -494,7 +565,6 @@ export default function Invitation() {
                     id="guest-info"
                     className={isSealFaded ? "fade-out" : ""}
                   >
-                    <p className="guest-to">Kepada Yth:</p>
                     {isLoadingGuest ? (
                       <div className="guest-name-loading-wrapper" title="Memuat nama tamu...">
                         <div className="guest-name-skeleton"></div>
@@ -518,7 +588,7 @@ export default function Invitation() {
             <div
               className={`bottom-envelope-hint ${isSealFaded ? "fade-out" : ""}`}
             >
-              Ketuk Segel Untuk Membuka
+              Ketuk Segel Lilin untuk Membuka Undangan
             </div>
             <div
               id="white-overlay"
@@ -533,12 +603,12 @@ export default function Invitation() {
         >
           {/* 1. HERO SECTION (Nama yang nikah) */}
           <section className="hero-section">
-            <div className="hero-badge animate-fade-down">Pernikahan</div>
+            <div className="hero-badge animate-fade-down">The Wedding Of</div>
             <h1 className="hero-names animate-title">
               M. Dzikri Fauzan <span className="ampersand">&</span> Resa Erviana
             </h1>
             <div className="scroll-indicator animate-bounce">
-              <span>Gulir Ke Bawah</span>
+              <span>Gulir ke Bawah</span>
               <div className="arrow-down">↓</div>
             </div>
           </section>
@@ -551,12 +621,22 @@ export default function Invitation() {
                 {/* Bagian Ayat QS. Ar-Rum: 21 (Rapi, Anggun & Bersih) */}
                 <div className="quote-block">
                   <div className="quote-badge">QS. Ar-Rum : 21</div>
-                  <h2 className="section-title quote-title">Tentang Cinta yang Menenangkan</h2>
+                  <h2 className="section-title quote-title">Holy Matrimony</h2>
                   
-                  <div className="quote-text-wrapper">
+                  <div
+                    className={`quote-text-wrapper ${revealedWordCount > 0 ? "is-active" : ""}`}
+                    ref={quoteRef}
+                  >
                     <span className="quote-mark open">“</span>
                     <p className="quote-text">
-                      Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya diantaramu rasa kasih dan sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda bagi kaum yang berfikir.
+                      {arRumWords.map((word, index) => (
+                        <span
+                          key={index}
+                          className={`verse-word ${index < revealedWordCount ? "is-revealed" : ""}`}
+                        >
+                          {word}{" "}
+                        </span>
+                      ))}
                     </p>
                     <span className="quote-mark close">”</span>
                   </div>
@@ -571,7 +651,7 @@ export default function Invitation() {
 
                 {/* Header Mempelai */}
                 <div className="couple-header">
-                  <h2 className="section-title couple-title">Kedua Mempelai</h2>
+                  <h2 className="section-title couple-title">The Happy Couple</h2>
                 </div>
 
                 {/* Grid Profil Mempelai */}
@@ -669,7 +749,7 @@ export default function Invitation() {
             </section>
 
           {/* 2. FLIP CLOCK (Hitung mundur) */}
-          <section className="section-padding reveal-on-scroll">
+          <section className="section-padding countdown-section reveal-on-scroll">
             <div className="save-the-date-container">
               <img
                 src="/images/flower-branch.png"
@@ -678,7 +758,7 @@ export default function Invitation() {
               />
 
               <div className="flip-clock-card">
-                <h2 className="section-title">Simpan Tanggalnya</h2>
+                <h2 className="section-title">Save The Date</h2>
                 <div className="date-highlight">Sabtu, 26 September 2026</div>
                 <div className="flip-clock-board">
                   {["days", "hours", "minutes", "seconds"].map((unit) => (
@@ -717,13 +797,13 @@ export default function Invitation() {
                           <circle cx="12" cy="12" r="10" />
                           <polyline points="12 6 12 12 16 14" />
                         </svg>
-                        <span>09:00 WIB - SELESAI</span>
+                        <span>09:00 WIB - Selesai</span>
                       </div>
                     </div>
 
-                    {/* Resepsi Nikah */}
+                    {/* Resepsi Pernikahan */}
                     <div className="schedule-item">
-                      <div className="schedule-badge">Resepsi Nikah</div>
+                      <div className="schedule-badge">Wedding Reception</div>
                       <div className="schedule-time">
                         <svg className="schedule-clock-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <circle cx="12" cy="12" r="10" />
@@ -744,10 +824,10 @@ export default function Invitation() {
             </div>
           </section>
           {/* 4. LOKASI ACARA (Maps) */}
-          <section className="section-padding reveal-on-scroll">
+          <section className="section-padding location-section reveal-on-scroll">
             <div className="location-card">
               <h2 className="section-title" style={{ marginTop: "20px" }}>
-                Lokasi Acara
+                Wedding Venue
               </h2>
               <div className="map-responsive">
                 <iframe
@@ -782,7 +862,7 @@ export default function Invitation() {
             </div>
           </section>
 
-          {/* 5. OUR LOVE STORY TIMELINE */}
+          {/* 5. KISAH KASIH KAMI */}
           <section className="section-padding timeline-section">
             <h2 className="section-title reveal-on-scroll">Our Love Story</h2>
             <div className="timeline-container">
@@ -790,8 +870,11 @@ export default function Invitation() {
                 <div className="timeline-dot"></div>
                 <div className="timeline-content">
                   <div className="timeline-date">2024</div>
-                  <h3 className="timeline-title">Pertemuan Pertama</h3>
-                  <p className="timeline-text">Satu tempat kerja yang sama</p>
+                  <h3 className="timeline-title">First Meeting</h3>
+                  <p className="timeline-text">
+                    Berawal dari tempat kerja yang sama, benih kebersamaan dan
+                    ketulusan mulai tumbuh di antara kami berdua.
+                  </p>
                 </div>
               </div>
 
@@ -799,10 +882,10 @@ export default function Invitation() {
                 <div className="timeline-dot"></div>
                 <div className="timeline-content">
                   <div className="timeline-date">DESEMBER 2025</div>
-                  <h3 className="timeline-title">Tunangan</h3>
+                  <h3 className="timeline-title">Engagement</h3>
                   <p className="timeline-text">
-                    Dengan restu kedua orang tua, tukar cincin dan komitmen
-                    resmi pernikahan.
+                    Dengan restu dan doa tulus kedua orang tua, kami mengikat
+                    komitmen saling setia melalui pertukaran cincin.
                   </p>
                 </div>
               </div>
@@ -811,10 +894,10 @@ export default function Invitation() {
                 <div className="timeline-dot"></div>
                 <div className="timeline-content">
                   <div className="timeline-date">AGUSTUS 2026</div>
-                  <h3 className="timeline-title">Lamaran</h3>
+                  <h3 className="timeline-title">The Proposal</h3>
                   <p className="timeline-text">
-                    Dengan restu kedua orang tua, kami memutuskan untuk
-                    melangkah ke jenjang yang lebih serius.
+                    Pertemuan hangat antar kedua keluarga besar untuk memantapkan
+                    langkah menuju gerbang pernikahan yang suci.
                   </p>
                 </div>
               </div>
@@ -822,11 +905,10 @@ export default function Invitation() {
               <div className="timeline-item reveal-on-scroll timeline-anim">
                 <div className="timeline-dot"></div>
                 <div className="timeline-content">
-                  <div className="timeline-date">2026</div>
-                  <h3 className="timeline-title">Pernikahan</h3>
+                  <div className="timeline-date">26 SEPTEMBER 2026</div>
+                  <h3 className="timeline-title">The Wedding Day</h3>
                   <p className="timeline-text">
-                    Insyallah 26 September 2026 Alhamdulillah, kami siap memulai
-                    kehidupan baru bersama dalam ikatan suci pernikahan.
+                    Insyaallah pada hari Sabtu, 26 September 2026, kami mengikat janji suci pernikahan untuk mengarungi bahtera rumah tangga yang sakinah, mawaddah, warahmah.
                   </p>
                 </div>
               </div>
@@ -839,27 +921,27 @@ export default function Invitation() {
           <section className="section-padding rsvp-section reveal-on-scroll">
             <div className="modern-rsvp-card">
               <div className="rsvp-header">
-                <span className="rsvp-tag">RSVP & Kehadiran</span>
-                <h2>Konfirmasi Kehadiran</h2>
+                <span className="rsvp-tag">RSVP</span>
+                <h2>RSVP &amp; Attendance</h2>
                 <p>
-                  Silakan isi form di bawah ini untuk konfirmasi kehadiran Anda.
+                  Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu.
                 </p>
               </div>
 
               <form className="rsvp-form" onSubmit={handleSubmitRSVP}>
                 <div className="form-group">
-                  <label>Nama Tamu</label>
+                  <label>Nama Lengkap</label>
                   <input
                     type="text"
                     className="form-input"
                     value={rsvpName}
                     onChange={(e) => setRsvpName(e.target.value)}
-                    placeholder="Masukkan Nama Anda..."
+                    placeholder="Tuliskan nama lengkap Anda..."
                     required
                   />
                 </div>
                 <div className="form-group">
-                  <label>Status Kehadiran</label>
+                  <label>Konfirmasi Kehadiran</label>
                   <div className="radio-pills">
                     <button
                       type="button"
@@ -873,7 +955,7 @@ export default function Invitation() {
                       className={`pill-btn ${attendance === "Tidak Bisa Hadir" ? "active" : ""}`}
                       onClick={() => setAttendance("Tidak Bisa Hadir")}
                     >
-                      ✕ Maaf Tidak Bisa
+                      ✕ Berhalangan Hadir
                     </button>
                   </div>
                 </div>
@@ -888,14 +970,16 @@ export default function Invitation() {
                         onClick={() =>
                           setGuestCount(Math.max(1, guestCount - 1))
                         }
+                        aria-label="Kurangi jumlah tamu"
                       >
                         −
                       </button>
-                      <span className="counter-value">{guestCount}</span>
+                      <span className="counter-value">{guestCount} Orang</span>
                       <button
                         type="button"
                         className="counter-btn"
                         onClick={() => setGuestCount(guestCount + 1)}
+                        aria-label="Tambah jumlah tamu"
                       >
                         +
                       </button>
@@ -904,13 +988,13 @@ export default function Invitation() {
                 )}
 
                 <div className="form-group">
-                  <label>Pesan / Doa Ucapan</label>
+                  <label>Doa Restu &amp; Pesan Ucapan</label>
                   <textarea
                     className="form-input textarea"
                     rows="3"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Tuliskan ucapan selamat untuk kedua mempelai..."
+                    placeholder="Tuliskan untaian doa dan ucapan selamat untuk kedua mempelai..."
                     required
                   ></textarea>
                 </div>
@@ -919,14 +1003,14 @@ export default function Invitation() {
                   className="submit-btn"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Menyimpan ke Database..." : "Kirim"}
+                  {isSubmitting ? "Mengirimkan Konfirmasi..." : "Kirim Konfirmasi & Doa"}
                 </button>
               </form>
             </div>
           </section>
 
           {/* WEDDING GIFT */}
-          <section className="section-padding reveal-on-scroll">
+          <section className="section-padding gift-section reveal-on-scroll">
             <div className="gift-card-mini">
               <div className="gift-icon-wrap">
                 <svg
@@ -945,18 +1029,17 @@ export default function Invitation() {
               </div>
 
               <h2 className="section-title" style={{ marginBottom: "6px" }}>
-                Tanda Kasih
+                Wedding Gift
               </h2>
               <p className="gift-teaser-text">
-                Doa restu Anda sudah menjadi hadiah terindah bagi kami. Namun
-                bila ingin memberi lebih, kami dengan senang hati menerimanya.
+                Doa restu Anda merupakan karunia terindah bagi kami. Namun apabila Bapak/Ibu/Saudara/i hendak memberikan tanda kasih, kami menyediakannya melalui dompet digital berikut:
               </p>
 
               <button
                 className={`gift-toggle-btn ${showGiftDetails ? "is-open" : ""}`}
                 onClick={() => setShowGiftDetails((prev) => !prev)}
               >
-                {showGiftDetails ? "Tutup" : "Kirim Hadiah"}
+                {showGiftDetails ? "Tutup Pilihan Rekening" : "Kirim Tanda Kasih"}
                 <svg
                   className="gift-toggle-arrow"
                   width="14"
@@ -976,7 +1059,7 @@ export default function Invitation() {
                 <div className="gift-accounts-inner">
                   {/* Custom Dropdown Selector */}
                   <div className="gift-dropdown-container">
-                    <label className="gift-dropdown-label">Pilih Rekening:</label>
+                    <label className="gift-dropdown-label">Pilih Rekening Tujuan:</label>
                     <div className="gift-dropdown">
                       <button
                         type="button"
@@ -997,7 +1080,7 @@ export default function Invitation() {
                             </>
                           ) : (
                             <span className="gift-dropdown-selected-text">
-                              — Pilih Rekening —
+                              — Pilih Rekening Bank —
                             </span>
                           )}
                         </span>
@@ -1060,7 +1143,7 @@ export default function Invitation() {
                               className={`gift-copy-btn-compact ${copiedTarget === activeAcc.id ? "copied" : ""}`}
                               onClick={() => handleCopyText(activeAcc.accountNumber, activeAcc.id)}
                             >
-                              {copiedTarget === activeAcc.id ? "Tersalin ✓" : "Salin"}
+                              {copiedTarget === activeAcc.id ? "Berhasil Disalin ✓" : "Salin No. Rekening"}
                             </button>
                           </div>
                           <p className="gift-detail-holder">
@@ -1076,13 +1159,13 @@ export default function Invitation() {
           </section>
 
           {/* GALERI FOTO (4 SLOT FOTO AESTHETIC DENGAN LIGHTBOX) */}
-          <section className="section-padding reveal-on-scroll">
+          <section className="section-padding gallery-section reveal-on-scroll">
             <div className="gallery-section-card">
               <div className="gallery-header">
-                <span className="gallery-tag">Galeri Cinta</span>
-                <h2 className="section-title">Momen Bahagia</h2>
+                <span className="gallery-tag">Our Moments</span>
+                <h2 className="section-title">Moments &amp; Memories</h2>
                 <p className="gallery-subtitle">
-                  Setiap detik mengabadikan ketulusan dan kehangatan rasa kami berdua
+                  Mengabadikan kehangatan, ketulusan, dan langkah awal perjalanan cinta kami berdua
                 </p>
               </div>
 
@@ -1118,7 +1201,7 @@ export default function Invitation() {
                               <line x1="12" y1="22.08" x2="12" y2="12" />
                             </svg>
                           </div>
-                          <span className="gallery-view-hint">Sentuh untuk 3D</span>
+                          <span className="gallery-view-hint">Sentuh untuk Melihat 3D</span>
                         </div>
                       </div>
                     </div>
@@ -1154,7 +1237,7 @@ export default function Invitation() {
 
                 <div className="gallery-3d-hint-badge">
                   <span className="hint-hand-icon">🖐️</span>
-                  <span>Seret foto untuk putar 3D</span>
+                  <span>Sentuh &amp; geser foto untuk memutar 3D</span>
                 </div>
 
                 <div className="gallery-3d-top-actions">
@@ -1215,50 +1298,21 @@ export default function Invitation() {
                     </div>
                   </div>
 
-                  {/* SISI BELAKANG (TULISAN SAMBUNG ELEGAN NAMA KEDUA MEMPELAI) */}
+                  {/* SISI BELAKANG: PUTIH POLOS DENGAN TULISAN NAMA KEDUA MEMPELAI */}
                   <div className="gallery-card-face card-back">
-                    <div className="card-back-texture">
-                      <div className="card-back-inner-frame">
-                        <div className="card-back-corner tl">❧</div>
-                        <div className="card-back-corner tr">❧</div>
-                        <div className="card-back-corner bl">❧</div>
-                        <div className="card-back-corner br">❧</div>
-
-                        <div className="card-back-subhead">The Wedding of</div>
-
-                        {/* TULISAN SAMBUNG BESAR & ANGGUN */}
-                        <div className="card-back-cursive-title">
-                          M. Dzikri Fauzan
-                        </div>
-                        <div className="card-back-cursive-amp">&amp;</div>
-                        <div className="card-back-cursive-title">
-                          Resa Erviana
-                        </div>
-
-                        <div className="card-back-quote-divider">
-                          <span className="card-divider-line"></span>
-                          <span className="card-divider-gem">✦</span>
-                          <span className="card-divider-line"></span>
-                        </div>
-
-                        <p className="card-back-quote-text">
-                          “Setiap kisah cinta itu indah, namun kisah cinta kami adalah yang paling kami syukuri.”
-                        </p>
-
-                        <div className="card-back-monogram-seal">
-                          <div className="monogram-wax">
-                            <span className="monogram-initials">D &amp; R</span>
-                          </div>
-                        </div>
-
-                        <div className="card-back-date-text">
-                          26 • 09 • 2026
-                        </div>
-
-                        <div className="card-back-drag-tip">
-                          ↺ Seret kembali untuk melihat foto
-                        </div>
+                    <div className="card-back-plain">
+                      <span className="card-back-subtitle">The Wedding of</span>
+                      <h3 className="card-back-couple-names">
+                        <span className="name-line">M. Dzikri Fauzan</span>
+                        <span className="card-back-amp">&amp;</span>
+                        <span className="name-line">Resa Erviana</span>
+                      </h3>
+                      <div className="card-back-divider">
+                        <span className="card-back-divider-line"></span>
+                        <span className="card-back-divider-diamond">✦</span>
+                        <span className="card-back-divider-line"></span>
                       </div>
+                      <div className="card-back-date">26 September 2026</div>
                     </div>
                   </div>
                 </div>
@@ -1296,11 +1350,11 @@ export default function Invitation() {
 
           {/* SECTION KOMENTAR DENGAN GRADASI FADE */}
           {comments.length > 0 && (
-            <section className="section-padding reveal-on-scroll">
+            <section className="section-padding guestbook-section reveal-on-scroll">
               <div className="guestbook-container">
-                <h2 className="section-title">Ucapan & Doa</h2>
+                <h2 className="section-title">Wishes &amp; Prayers</h2>
                 <p className="guestbook-subtitle">
-                  {comments.length} Pesan dari kerabat & sahabat
+                  {comments.length} Doa dan ucapan tulus dari keluarga &amp; sahabat
                 </p>
 
                 <div
@@ -1320,7 +1374,7 @@ export default function Invitation() {
                             >
                               {comment.attendance === "Hadir"
                                 ? "✓ Hadir"
-                                : "✕ Tidak Hadir"}
+                                : "✕ Berhalangan Hadir"}
                             </span>
                           </div>
                         </div>
@@ -1335,23 +1389,20 @@ export default function Invitation() {
                     className="show-more-btn"
                     onClick={() => setShowAllComments(!showAllComments)}
                   >
-                    {showAllComments ? "Sembunyikan Sebagian" : "Lihat Semua"}
+                    {showAllComments ? "Tampilkan Lebih Sedikit" : "Lihat Semua Ucapan"}
                   </button>
                 )}
               </div>
             </section>
           )}
 
-          <footer className="wedding-footer">
-            <p>M. Dzikri Fauzan & Resa Erviana © 2026</p>
-          </footer>
           </div>
 
           {/* Floating Vinyl Music Player */}
           <div
             className={`floating-music-player ${isPlaying ? "playing" : ""}`}
             onClick={togglePlay}
-            title={isPlaying ? "Klik untuk jeda musik" : "Klik untuk putar musik"}
+            title={isPlaying ? "Jeda Musik Latar" : "Putar Musik Latar"}
           >
             <div className="floating-vinyl-record">
               <img

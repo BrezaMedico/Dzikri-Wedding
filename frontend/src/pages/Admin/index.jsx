@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import API_BASE_URL from "../../config/api";
 import "./Admin.css";
 
 export default function Admin() {
@@ -21,20 +22,20 @@ export default function Admin() {
   };
 
   // Handler jika token habis masa berlakunya (1 minggu)
-  const handleSessionExpired = () => {
+  const handleSessionExpired = useCallback(() => {
     localStorage.removeItem("admin_token");
     localStorage.removeItem("admin_token_expiry");
     localStorage.removeItem("admin_username");
     alert("Sesi login Anda telah berakhir (1 minggu). Silakan login kembali.");
     navigate("/admin/login", { replace: true });
-  };
+  }, [navigate]);
 
   // Fungsi untuk mengambil data tamu dan RSVP
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const [guestsRes, rsvpsRes] = await Promise.all([
-        axios.get("http://localhost:5000/api/guests", { headers: getAuthHeaders() }),
-        axios.get("http://localhost:5000/api/rsvp"), // RSVP tetap publik
+        axios.get(`${API_BASE_URL}/api/guests`, { headers: getAuthHeaders() }),
+        axios.get(`${API_BASE_URL}/api/rsvp`), // RSVP tetap publik
       ]);
       setGuests(guestsRes.data);
       setRsvps(rsvpsRes.data);
@@ -45,12 +46,34 @@ export default function Admin() {
         console.error("Gagal mengambil data dari database", error);
       }
     }
-  };
+  }, [handleSessionExpired]);
 
   // Panggil data saat halaman pertama kali dimuat
   useEffect(() => {
-    fetchData();
-  }, []);
+    let ignore = false;
+    const loadInitialData = async () => {
+      try {
+        const [guestsRes, rsvpsRes] = await Promise.all([
+          axios.get(`${API_BASE_URL}/api/guests`, { headers: getAuthHeaders() }),
+          axios.get(`${API_BASE_URL}/api/rsvp`),
+        ]);
+        if (!ignore) {
+          setGuests(guestsRes.data);
+          setRsvps(rsvpsRes.data);
+        }
+      } catch (error) {
+        if (error.response?.status === 401) {
+          handleSessionExpired();
+        } else {
+          console.error("Gagal mengambil data dari database", error);
+        }
+      }
+    };
+    loadInitialData();
+    return () => {
+      ignore = true;
+    };
+  }, [handleSessionExpired]);
 
   // Fungsi Generate Link (Sesuai kodingan kamu + Header Auth + Refresh Tabel)
   const handleGenerate = async (e) => {
@@ -58,7 +81,7 @@ export default function Admin() {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/guests",
+        `${API_BASE_URL}/api/guests`,
         { name },
         { headers: getAuthHeaders() }
       );
@@ -85,7 +108,7 @@ export default function Admin() {
   const handleDelete = async (id) => {
     if (window.confirm("Apakah Anda yakin ingin menghapus data tamu ini?")) {
       try {
-        await axios.delete(`http://localhost:5000/api/guests/${id}`, {
+        await axios.delete(`${API_BASE_URL}/api/guests/${id}`, {
           headers: getAuthHeaders(),
         });
         fetchData(); // Update tabel setelah dihapus
@@ -115,6 +138,49 @@ export default function Admin() {
       navigate("/admin/login", { replace: true });
     }
   };
+
+  // Kalkulasi statistik & total tamu yang hadir
+  const totalUndangan = guests.length;
+
+  const totalTamuHadirFromGuests = guests.reduce((total, guest) => {
+    const rsvp = rsvps.find(
+      (r) => r.name.toLowerCase() === guest.name.toLowerCase()
+    );
+    if (rsvp && rsvp.attendance === "Hadir") {
+      return total + (Number(rsvp.guestCount) || 1);
+    }
+    return total;
+  }, 0);
+
+  const totalUndanganHadir = guests.filter((guest) => {
+    const rsvp = rsvps.find(
+      (r) => r.name.toLowerCase() === guest.name.toLowerCase()
+    );
+    return rsvp && rsvp.attendance === "Hadir";
+  }).length;
+
+  const totalUndanganTidakHadir = guests.filter((guest) => {
+    const rsvp = rsvps.find(
+      (r) => r.name.toLowerCase() === guest.name.toLowerCase()
+    );
+    return (
+      rsvp &&
+      (rsvp.attendance === "Tidak Hadir" ||
+        rsvp.attendance === "Tidak Bisa Hadir" ||
+        rsvp.attendance === "Berhalangan")
+    );
+  }).length;
+
+  const totalBelumKonfirmasi = Math.max(
+    0,
+    totalUndangan - (totalUndanganHadir + totalUndanganTidakHadir)
+  );
+
+  const totalRsvpHadirPax = rsvps
+    .filter((r) => r.attendance === "Hadir")
+    .reduce((sum, r) => sum + (Number(r.guestCount) || 1), 0);
+
+  const totalSemuaTamuHadir = Math.max(totalTamuHadirFromGuests, totalRsvpHadirPax);
 
   return (
     <div className="admin-container">
@@ -183,6 +249,45 @@ export default function Admin() {
           </div>
         )}
 
+        {/* STATISTIK RINGKASAN TOTAL TAMU */}
+        <div className="admin-stats-grid">
+          <div className="admin-stat-card highlight">
+            <div className="stat-icon">👥</div>
+            <div className="stat-content">
+              <span className="stat-label">Total Tamu yang Hadir</span>
+              <span className="stat-value text-success">{totalSemuaTamuHadir} Orang</span>
+              <span className="stat-subtext">Akumulasi jumlah tamu konfirmasi hadir</span>
+            </div>
+          </div>
+
+          <div className="admin-stat-card">
+            <div className="stat-icon">✉️</div>
+            <div className="stat-content">
+              <span className="stat-label">Total Undangan</span>
+              <span className="stat-value">{totalUndangan} Tamu</span>
+              <span className="stat-subtext">Link undangan dibuat</span>
+            </div>
+          </div>
+
+          <div className="admin-stat-card">
+            <div className="stat-icon">✅</div>
+            <div className="stat-content">
+              <span className="stat-label">Konfirmasi Hadir</span>
+              <span className="stat-value text-primary">{totalUndanganHadir} Undangan</span>
+              <span className="stat-subtext">Tamu yang menyatakan hadir</span>
+            </div>
+          </div>
+
+          <div className="admin-stat-card">
+            <div className="stat-icon">⏳</div>
+            <div className="stat-content">
+              <span className="stat-label">Belum Konfirmasi</span>
+              <span className="stat-value text-warning">{totalBelumKonfirmasi} Undangan</span>
+              <span className="stat-subtext">Menunggu respon RSVP</span>
+            </div>
+          </div>
+        </div>
+
         {/* TABEL DAFTAR TAMU & KONFIRMASI RSVP */}
         <div className="table-responsive">
           <table className="admin-table">
@@ -242,6 +347,23 @@ export default function Admin() {
                 })
               )}
             </tbody>
+            {guests.length > 0 && (
+              <tfoot>
+                <tr className="admin-table-total-row">
+                  <td colSpan="2" className="total-label-cell">
+                    TOTAL KESELURUHAN TAMU HADIR:
+                  </td>
+                  <td className="total-value-cell">
+                    <span className="total-highlight-badge">
+                      {totalSemuaTamuHadir} Orang
+                    </span>
+                  </td>
+                  <td className="total-info-cell">
+                    {totalUndanganHadir} dari {totalUndangan} undangan hadir
+                  </td>
+                </tr>
+              </tfoot>
+            )}
           </table>
         </div>
       </div>

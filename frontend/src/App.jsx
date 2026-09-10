@@ -10,6 +10,7 @@ function App() {
       <Routes>
         {/* Halaman Login Admin */}
         <Route path="/admin/login" element={<Login />} />
+        <Route path="/login" element={<Navigate to="/admin/login" replace />} />
 
         {/* Halaman Admin (Dilindungi Autentikasi & Token 1 Minggu) */}
         <Route

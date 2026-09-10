@@ -1,18 +1,34 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 
-// Setup koneksi ke Neon Database
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false // Wajib untuk Neon
-  }
-});
+let pool;
 
-// Tangani error koneksi idle agar server tidak crash saat Neon sleep / timeout
-pool.on('error', (err) => {
-  console.error('⚠️ Neon DB idle client error (handled):', err.message);
-});
+if (process.env.DATABASE_URL) {
+  // Setup koneksi ke Neon / PostgreSQL Server
+  pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false // Wajib untuk Neon
+    }
+  });
+
+  // Tangani error koneksi idle agar server tidak crash saat Neon sleep / timeout
+  pool.on('error', (err) => {
+    console.error('⚠️ Neon DB idle client error (handled):', err.message);
+  });
+} else {
+  // Fallback ke Embedded PostgreSQL (PGlite) jika DATABASE_URL belum diisi
+  const path = require('path');
+  const { PGlite } = require('@electric-sql/pglite');
+  const dbPath = path.join(__dirname, 'data');
+  const pgliteInstance = new PGlite(dbPath);
+
+  pool = {
+    query: (text, params) => pgliteInstance.query(text, params),
+    on: () => {}
+  };
+  console.log('⚡ DATABASE_URL tidak ditemukan. Menggunakan Embedded PostgreSQL (PGlite) di:', dbPath);
+}
 
 // Bikin tabel otomatis jika belum ada
 const initDB = async () => {

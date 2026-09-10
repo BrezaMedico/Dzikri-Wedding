@@ -1,6 +1,8 @@
 # Dependency directories
 node_modules/
 **/node_modules/
+backend/db/data/
+
 
 # Environment files
 .env
@@ -8,6 +10,7 @@ node_modules/
 .env.*.local
 **/.env
 **/.env.*
+!**/.env.example
 
 # Build directories
 dist/
