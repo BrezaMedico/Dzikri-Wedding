@@ -1289,32 +1289,60 @@ export default function Invitation() {
                     );
                   })()}
 
-                  {/* Gift Kado Fisik (Simple & Elegan) */}
-                  <div className="gift-physical-card-simple">
-                    <div className="gift-physical-simple-header">
-                      <div className="gift-physical-header-title">
-                        <span className="gift-physical-badge">Gift Kado Fisik</span>
-                        <p className="gift-physical-receiver">
+                  {/* Pembatas Halus & Elegan */}
+                  <div className="gift-or-divider">
+                    <span>Atau Kirim Kado Fisik</span>
+                  </div>
+
+                  {/* Kartu Kado Fisik yang Rapi & Proporsional */}
+                  <div className="gift-physical-card-v2">
+                    <div className="gift-physical-v2-header">
+                      <div className="gift-physical-v2-icon">
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <rect x="3" y="8" width="18" height="13" rx="1.5" />
+                          <path d="M3 12h18" />
+                          <path d="M12 8v13" />
+                          <path d="M12 8c-1.8 0-3.2-1.4-3.2-3.2S10.2 1.6 12 3.4c1.8-1.8 3.2-1.4 3.2 1.4S13.8 8 12 8Z" />
+                        </svg>
+                      </div>
+                      <div className="gift-physical-v2-info">
+                        <h4 className="gift-physical-v2-title">Gift Kado Fisik</h4>
+                        <p className="gift-physical-v2-receiver">
                           Penerima: <strong>Rumah Kak Resa / Ibu H Iom</strong>
                         </p>
                       </div>
-                      <button
-                        type="button"
-                        className={`gift-copy-btn-compact ${copiedTarget === "physical_gift" ? "copied" : ""}`}
-                        onClick={() =>
-                          handleCopyText(
-                            "Penerima: Rumah Kak Resa / Ibu H Iom\nAlamat: Gang Masjid Ataqwa, RT.2/RW.1, Kampung Cemplang, KAB. BOGOR, CIBUNGBULANG, JAWA BARAT, ID, 16630",
-                            "physical_gift"
-                          )
-                        }
-                      >
-                        {copiedTarget === "physical_gift" ? "Disalin ✓" : "Salin Alamat"}
-                      </button>
                     </div>
 
-                    <p className="gift-physical-address-simple">
-                      Gang Masjid Ataqwa, RT.2/RW.1, Kampung Cemplang, KAB. BOGOR, CIBUNGBULANG, JAWA BARAT, ID, 16630
-                    </p>
+                    <div className="gift-physical-v2-body">
+                      <div className="gift-physical-v2-address-box">
+                        <p className="gift-physical-v2-address-text">
+                          Gang Masjid Ataqwa, RT.2/RW.1, Kampung Cemplang, KAB. BOGOR, CIBUNGBULANG, JAWA BARAT, ID, 16630
+                        </p>
+                      </div>
+                      <div className="gift-physical-v2-action">
+                        <button
+                          type="button"
+                          className={`gift-copy-btn-compact ${copiedTarget === "physical_gift" ? "copied" : ""}`}
+                          onClick={() =>
+                            handleCopyText(
+                              "Penerima: Rumah Kak Resa / Ibu H Iom\nAlamat: Gang Masjid Ataqwa, RT.2/RW.1, Kampung Cemplang, KAB. BOGOR, CIBUNGBULANG, JAWA BARAT, ID, 16630",
+                              "physical_gift"
+                            )
+                          }
+                        >
+                          {copiedTarget === "physical_gift" ? "✓ Alamat Berhasil Disalin" : "Salin Alamat Lengkap"}
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -2154,59 +2154,116 @@
     font-weight: 700;
 }
 
-/* Card Kado Fisik (Simple & Minimalis) */
-.gift-physical-card-simple {
+/* Pembatas Elegan & Halus */
+.gift-or-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 20px 0 14px;
+    color: #a39587;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+.gift-or-divider::before,
+.gift-or-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #ece3d3, transparent);
+}
+
+/* Card Kado Fisik (Proporsional & Seimbang) */
+.gift-physical-card-v2 {
     background: #faf8f5;
     border: 1px solid #ece3d3;
-    border-radius: 14px;
-    padding: 14px 16px;
+    border-radius: 16px;
+    padding: 18px 20px;
     text-align: left;
-    margin-top: 14px;
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.01);
     position: relative;
     z-index: 10;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.01);
     animation: cardReveal 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.gift-physical-simple-header {
+.gift-physical-v2-header {
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+    align-items: center;
     gap: 12px;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #ece3d3;
 }
 
-.gift-physical-header-title {
+.gift-physical-v2-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #ffffff;
+    border: 1px solid #e0d5c1;
+    color: #c29b62;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.gift-physical-v2-info {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 2px;
 }
 
-.gift-physical-badge {
-    font-size: 0.7rem;
+.gift-physical-v2-title {
+    font-size: 0.85rem;
     font-weight: 700;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    color: #8c7a6b;
+    color: #2c2523;
+    margin: 0;
+    letter-spacing: 0.2px;
 }
 
-.gift-physical-receiver {
-    font-size: 0.88rem;
+.gift-physical-v2-receiver {
+    font-size: 0.82rem;
+    color: #6b5e53;
+    margin: 0;
+}
+
+.gift-physical-v2-receiver strong {
+    color: #2c2523;
+    font-weight: 600;
+}
+
+.gift-physical-v2-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.gift-physical-v2-address-box {
+    background: #ffffff;
+    border: 1px solid #ece3d3;
+    border-radius: 10px;
+    padding: 10px 14px;
+}
+
+.gift-physical-v2-address-text {
+    font-size: 0.82rem;
+    line-height: 1.55;
     color: #4a3f35;
     margin: 0;
 }
 
-.gift-physical-receiver strong {
-    color: #2c2523;
+.gift-physical-v2-action {
+    display: flex;
+    justify-content: center;
 }
 
-.gift-physical-address-simple {
-    font-size: 0.82rem;
-    line-height: 1.55;
-    color: #6b5e53;
-    margin: 0;
-    padding-top: 8px;
-    border-top: 1px dashed #ece3d3;
+.gift-physical-v2-action .gift-copy-btn-compact {
+    padding: 7px 22px;
+    font-size: 0.78rem;
 }
 
 /* =========================================
