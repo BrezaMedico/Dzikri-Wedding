@@ -57,8 +57,28 @@ const initDB = async () => {
     `);
     console.log("✅ Tabel 'rsvp' siap digunakan!");
 
+    // Tabel Visitors (Tracking Pengunjung Otomatis)
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS visitors (
+        id SERIAL PRIMARY KEY,
+        slug VARCHAR(255) DEFAULT 'public',
+        ip VARCHAR(100),
+        user_agent TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+    console.log("✅ Tabel 'visitors' siap digunakan!");
+
+    // Migrasi kolom tambahan ke tabel guests jika belum ada
+    await pool.query(`
+      ALTER TABLE guests ADD COLUMN IF NOT EXISTS visit_count INTEGER DEFAULT 0;
+      ALTER TABLE guests ADD COLUMN IF NOT EXISTS last_visited_at TIMESTAMP;
+      ALTER TABLE guests ADD COLUMN IF NOT EXISTS checked_in BOOLEAN DEFAULT FALSE;
+    `);
+    console.log("✅ Kolom 'visit_count', 'last_visited_at', 'checked_in' di guests siap digunakan!");
+
   } catch (err) {
-    console.error("❌ Gagal membuat tabel:", err);
+    console.error("❌ Gagal membuat tabel / kolom:", err);
   }
 };
 

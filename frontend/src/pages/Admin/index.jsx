@@ -13,6 +13,11 @@ export default function Admin() {
   // State untuk menyimpan data dari database
   const [guests, setGuests] = useState([]);
   const [rsvps, setRsvps] = useState([]);
+  const [visitorStats, setVisitorStats] = useState({
+    totalVisitors: 0,
+    uniqueVisitors: 0,
+    guestVisits: 0,
+  });
   const adminUsername = localStorage.getItem("admin_username") || "Admin";
 
   // Helper untuk mengambil header token Authorization
@@ -30,15 +35,17 @@ export default function Admin() {
     navigate("/admin/login", { replace: true });
   }, [navigate]);
 
-  // Fungsi untuk mengambil data tamu dan RSVP
+  // Fungsi untuk mengambil data tamu, RSVP, dan Total Pengunjung dari database
   const fetchData = useCallback(async () => {
     try {
-      const [guestsRes, rsvpsRes] = await Promise.all([
+      const [guestsRes, rsvpsRes, visitorsRes] = await Promise.all([
         axios.get(`${API_BASE_URL}/api/guests`, { headers: getAuthHeaders() }),
-        axios.get(`${API_BASE_URL}/api/rsvp`), // RSVP tetap publik
+        axios.get(`${API_BASE_URL}/api/rsvp`),
+        axios.get(`${API_BASE_URL}/api/visitors/stats`),
       ]);
       setGuests(guestsRes.data);
       setRsvps(rsvpsRes.data);
+      if (visitorsRes?.data) setVisitorStats(visitorsRes.data);
     } catch (error) {
       if (error.response?.status === 401) {
         handleSessionExpired();
@@ -53,13 +60,15 @@ export default function Admin() {
     let ignore = false;
     const loadInitialData = async () => {
       try {
-        const [guestsRes, rsvpsRes] = await Promise.all([
+        const [guestsRes, rsvpsRes, visitorsRes] = await Promise.all([
           axios.get(`${API_BASE_URL}/api/guests`, { headers: getAuthHeaders() }),
           axios.get(`${API_BASE_URL}/api/rsvp`),
+          axios.get(`${API_BASE_URL}/api/visitors/stats`),
         ]);
         if (!ignore) {
           setGuests(guestsRes.data);
           setRsvps(rsvpsRes.data);
+          if (visitorsRes?.data) setVisitorStats(visitorsRes.data);
         }
       } catch (error) {
         if (error.response?.status === 401) {
@@ -104,9 +113,9 @@ export default function Admin() {
     }
   };
 
-  // Fungsi Hapus Data (Dengan Header Auth)
+  // Fungsi Hapus Data Tamu & RSVP Terkait di Database (Dengan Header Auth)
   const handleDelete = async (id) => {
-    if (window.confirm("Apakah Anda yakin ingin menghapus data tamu ini?")) {
+    if (window.confirm("Apakah Anda yakin ingin menghapus data tamu ini beserta status konfirmasinya di database?")) {
       try {
         await axios.delete(`${API_BASE_URL}/api/guests/${id}`, {
           headers: getAuthHeaders(),
@@ -116,8 +125,37 @@ export default function Admin() {
         if (error.response?.status === 401) {
           handleSessionExpired();
         } else {
-          alert("Gagal menghapus data");
+          alert("Gagal menghapus data di database!");
         }
+      }
+    }
+  };
+
+  // Fungsi Update Status Kehadiran Tamu langsung ke Backend / Database
+  const handleUpdateAttendance = async (guest, newAttendance) => {
+    let pax = 1;
+    if (newAttendance === "Hadir") {
+      const inputPax = window.prompt(
+        `Konfirmasi kehadiran untuk "${guest.name}". Masukkan jumlah orang yang hadir:`,
+        "1"
+      );
+      if (inputPax === null) return; // Dibatalkan oleh admin
+      pax = Number(inputPax) > 0 ? Number(inputPax) : 1;
+    }
+
+    try {
+      await axios.put(
+        `${API_BASE_URL}/api/guests/${guest.id}/attendance`,
+        { attendance: newAttendance, guestCount: pax },
+        { headers: getAuthHeaders() }
+      );
+      fetchData(); // Refresh data real-time dari database
+    } catch (error) {
+      if (error.response?.status === 401) {
+        handleSessionExpired();
+      } else {
+        alert("Gagal memperbarui status kehadiran di database!");
+        console.error(error);
       }
     }
   };
@@ -249,8 +287,19 @@ export default function Admin() {
           </div>
         )}
 
-        {/* STATISTIK RINGKASAN TOTAL TAMU */}
+        {/* STATISTIK RINGKASAN TOTAL TAMU & PENGUNJUNG */}
         <div className="admin-stats-grid">
+          <div className="admin-stat-card highlight-visitor">
+            <div className="stat-icon">🌐</div>
+            <div className="stat-content">
+              <span className="stat-label">Total Pengunjung</span>
+              <span className="stat-value text-info">{visitorStats.totalVisitors} Kunjungan</span>
+              <span className="stat-subtext">
+                {visitorStats.uniqueVisitors} perangkat unik • Terhitung otomatis
+              </span>
+            </div>
+          </div>
+
           <div className="admin-stat-card highlight">
             <div className="stat-icon">👥</div>
             <div className="stat-content">
@@ -294,15 +343,16 @@ export default function Admin() {
             <thead>
               <tr>
                 <th>Nama Tamu</th>
+                <th>Kunjungan</th>
                 <th>Konfirmasi Kehadiran</th>
                 <th>Berapa Orang</th>
-                <th>Aksi</th>
+                <th>Aksi (Database Backend)</th>
               </tr>
             </thead>
             <tbody>
               {guests.length === 0 ? (
                 <tr>
-                  <td colSpan="4" style={{ textAlign: "center", padding: "20px" }}>Belum ada data tamu.</td>
+                  <td colSpan="5" style={{ textAlign: "center", padding: "20px" }}>Belum ada data tamu.</td>
                 </tr>
               ) : (
                 guests.map((guest) => {
@@ -314,6 +364,22 @@ export default function Admin() {
                   return (
                     <tr key={guest.id}>
                       <td className="fw-bold">{guest.name}</td>
+
+                      {/* Kolom Status Kunjungan Undangan */}
+                      <td>
+                        {guest.visit_count > 0 ? (
+                          <span
+                            className="visit-badge opened"
+                            title={guest.last_visited_at ? `Terakhir dibuka: ${new Date(guest.last_visited_at).toLocaleString("id-ID")}` : ""}
+                          >
+                            Dibuka {guest.visit_count}x
+                          </span>
+                        ) : (
+                          <span className="visit-badge unopened">
+                            Belum Dibuka
+                          </span>
+                        )}
+                      </td>
                       
                       {/* Kolom Konfirmasi Kehadiran */}
                       <td>
@@ -326,19 +392,61 @@ export default function Admin() {
                         )}
                       </td>
 
-                      {/* Kolom Berapa Orang (Jika tidak hadir jadi "-" atau 0) */}
+                      {/* Kolom Berapa Orang */}
                       <td>
                         {rsvpData 
                           ? (rsvpData.attendance === "Hadir" ? `${rsvpData.guestCount} Orang` : "-") 
                           : "-"}
                       </td>
 
-                      {/* Kolom Aksi Salin & Hapus */}
+                      {/* Kolom Aksi yang Berpengaruh ke Database Backend */}
                       <td className="action-buttons">
-                        <button className="btn-copy" onClick={() => handleCopyLink(guest.slug)}>
+                        {rsvpData?.attendance === "Hadir" ? (
+                          <button
+                            type="button"
+                            className="btn-act-absent"
+                            title="Ubah status menjadi Tidak Hadir di backend"
+                            onClick={() => handleUpdateAttendance(guest, "Tidak Hadir")}
+                          >
+                            Batal Hadir
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            className="btn-act-attend"
+                            title="Set hadir & masukkan pax di database backend"
+                            onClick={() => handleUpdateAttendance(guest, "Hadir")}
+                          >
+                            + Set Hadir
+                          </button>
+                        )}
+
+                        {rsvpData && (
+                          <button
+                            type="button"
+                            className="btn-act-reset"
+                            title="Reset status kehadiran tamu ini di database"
+                            onClick={() => handleUpdateAttendance(guest, "Belum Mengisi")}
+                          >
+                            Reset
+                          </button>
+                        )}
+
+                        <button
+                          type="button"
+                          className="btn-copy"
+                          title="Salin link undangan tamu"
+                          onClick={() => handleCopyLink(guest.slug)}
+                        >
                           Salin Link
                         </button>
-                        <button className="btn-delete" onClick={() => handleDelete(guest.id)}>
+
+                        <button
+                          type="button"
+                          className="btn-delete"
+                          title="Hapus data tamu dan status RSVP di database"
+                          onClick={() => handleDelete(guest.id)}
+                        >
                           Hapus
                         </button>
                       </td>
@@ -350,7 +458,7 @@ export default function Admin() {
             {guests.length > 0 && (
               <tfoot>
                 <tr className="admin-table-total-row">
-                  <td colSpan="2" className="total-label-cell">
+                  <td colSpan="3" className="total-label-cell">
                     TOTAL KESELURUHAN TAMU HADIR:
                   </td>
                   <td className="total-value-cell">

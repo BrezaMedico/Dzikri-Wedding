@@ -149,6 +149,121 @@ export default function Invitation() {
   const [isDragging, setIsDragging] = useState(false);
   const dragStartRef = useRef({ x: 0, y: 0, rotX: 0, rotY: 0 });
 
+  // State 3D Photo Coverflow Carousel (PlayStation Style)
+  const [activePhotoIndex, setActivePhotoIndex] = useState(0);
+  const [isCarouselHovered, setIsCarouselHovered] = useState(false);
+  const [slideTimerKey, setSlideTimerKey] = useState(0);
+
+  const touchStartRef = useRef(null);
+  const touchDeltaRef = useRef(0);
+  const mouseStartRef = useRef(null);
+  const isMouseDraggingRef = useRef(false);
+
+  const goToNextSlide = useCallback(() => {
+    setActivePhotoIndex((prev) => (prev + 1) % galleryPhotos.length);
+    setSlideTimerKey((k) => k + 1);
+  }, [galleryPhotos.length]);
+
+  const goToPrevSlide = useCallback(() => {
+    setActivePhotoIndex((prev) => (prev - 1 + galleryPhotos.length) % galleryPhotos.length);
+    setSlideTimerKey((k) => k + 1);
+  }, [galleryPhotos.length]);
+
+  const goToSlide = useCallback((index) => {
+    setActivePhotoIndex(index);
+    setSlideTimerKey((k) => k + 1);
+  }, []);
+
+  // Auto-play: geser ke kanan setiap 4 detik & me-looping terus menerus
+  useEffect(() => {
+    if (selectedPhotoIndex !== null || isCarouselHovered) return;
+    const interval = setInterval(() => {
+      setActivePhotoIndex((prev) => (prev + 1) % galleryPhotos.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [galleryPhotos.length, selectedPhotoIndex, isCarouselHovered, slideTimerKey]);
+
+  const getSlidePosition = useCallback(
+    (index) => {
+      const total = galleryPhotos.length;
+      let diff = (index - activePhotoIndex + total) % total;
+      if (diff > total / 2) {
+        diff -= total;
+      }
+      if (diff === 0) return "center";
+      if (diff === -1) return "left";
+      if (diff === 1) return "right";
+      return "hidden";
+    },
+    [activePhotoIndex, galleryPhotos.length],
+  );
+
+  const handleCardClick = (index, position) => {
+    if (isMouseDraggingRef.current) return;
+    if (position === "center") {
+      handleOpen3DCard(index);
+    } else if (position === "left") {
+      goToPrevSlide();
+    } else if (position === "right") {
+      goToNextSlide();
+    } else {
+      goToSlide(index);
+    }
+  };
+
+  const handleTouchStart = (e) => {
+    setIsCarouselHovered(true);
+    touchStartRef.current = e.touches[0].clientX;
+    touchDeltaRef.current = 0;
+  };
+
+  const handleTouchMove = (e) => {
+    if (touchStartRef.current === null) return;
+    touchDeltaRef.current = e.touches[0].clientX - touchStartRef.current;
+  };
+
+  const handleTouchEnd = () => {
+    setIsCarouselHovered(false);
+    if (touchStartRef.current !== null) {
+      const minSwipeDistance = 35;
+      if (touchDeltaRef.current < -minSwipeDistance) {
+        goToNextSlide();
+      } else if (touchDeltaRef.current > minSwipeDistance) {
+        goToPrevSlide();
+      }
+    }
+    touchStartRef.current = null;
+    touchDeltaRef.current = 0;
+  };
+
+  const handleMouseDown = (e) => {
+    if (e.button !== 0) return;
+    mouseStartRef.current = e.clientX;
+    isMouseDraggingRef.current = false;
+  };
+
+  const handleMouseMove = (e) => {
+    if (mouseStartRef.current === null) return;
+    if (Math.abs(e.clientX - mouseStartRef.current) > 8) {
+      isMouseDraggingRef.current = true;
+    }
+  };
+
+  const handleMouseUp = (e) => {
+    if (mouseStartRef.current !== null && isMouseDraggingRef.current) {
+      const diff = e.clientX - mouseStartRef.current;
+      if (diff < -35) {
+        goToNextSlide();
+      } else if (diff > 35) {
+        goToPrevSlide();
+      }
+    }
+    mouseStartRef.current = null;
+    setTimeout(() => {
+      isMouseDraggingRef.current = false;
+    }, 60);
+  };
+
   const handleOpen3DCard = (index) => {
     setSelectedPhotoIndex(index);
     setRotX(0);
@@ -156,11 +271,14 @@ export default function Invitation() {
   };
 
   const handleClose3DCard = useCallback(() => {
+    if (selectedPhotoIndex !== null) {
+      setActivePhotoIndex(selectedPhotoIndex);
+    }
     setSelectedPhotoIndex(null);
     setRotX(0);
     setRotY(0);
     setIsDragging(false);
-  }, []);
+  }, [selectedPhotoIndex]);
 
   const handleFlipCard = useCallback((e) => {
     if (e && e.stopPropagation) e.stopPropagation();
@@ -301,6 +419,23 @@ export default function Invitation() {
     return () => {
       isMounted = false;
     };
+  }, [slug]);
+
+  // 1b. Rekam Kunjungan Tamu / Pengunjung ke Database Backend Secara Otomatis
+  useEffect(() => {
+    const recordVisit = async () => {
+      try {
+        const visitSlug = slug && slug.trim() ? slug.trim() : "public";
+        const sessionKey = `visited_rec_${visitSlug}`;
+        if (!sessionStorage.getItem(sessionKey)) {
+          await axios.post(`${API_BASE_URL}/api/visitors`, { slug: visitSlug });
+          sessionStorage.setItem(sessionKey, "1");
+        }
+      } catch (err) {
+        console.debug("Catat pengunjung silent:", err?.message);
+      }
+    };
+    recordVisit();
   }, [slug]);
 
   const sortedComments = useMemo(() => {
@@ -1169,44 +1304,161 @@ export default function Invitation() {
                 </p>
               </div>
 
-              <div className="gallery-grid">
-                {galleryPhotos.map((photo, index) => (
-                  <div
-                    key={photo.id}
-                    className="gallery-item"
-                    onClick={() => handleOpen3DCard(index)}
+              {/* 3D Coverflow Carousel Stage (PlayStation Style) */}
+              <div
+                className="gallery-coverflow-wrapper"
+                onMouseEnter={() => setIsCarouselHovered(true)}
+                onMouseLeave={() => setIsCarouselHovered(false)}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+              >
+                {/* Ambient Pedestal Glow */}
+                <div className="coverflow-ambient-glow" />
+
+                {/* Left Navigation Arrow */}
+                <button
+                  type="button"
+                  className="coverflow-nav-arrow prev"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    goToPrevSlide();
+                  }}
+                  aria-label="Foto Sebelumnya"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   >
-                    <div className="gallery-frame-outer">
-                      <div className="gallery-img-wrapper">
-                        <img
-                          src={photo.src}
-                          alt={photo.alt}
-                          className="gallery-img"
-                          loading="lazy"
-                        />
-                        <div className="gallery-overlay">
-                          <div className="gallery-zoom-icon">
-                            <svg
-                              width="22"
-                              height="22"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                              <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                              <line x1="12" y1="22.08" x2="12" y2="12" />
-                            </svg>
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                </button>
+
+                {/* 3D Cards Track */}
+                <div className="gallery-coverflow-stage">
+                  {galleryPhotos.map((photo, index) => {
+                    const position = getSlidePosition(index);
+                    const isCenter = position === "center";
+                    const isLeft = position === "left";
+                    const isRight = position === "right";
+
+                    return (
+                      <div
+                        key={photo.id}
+                        className={`coverflow-card is-${position}`}
+                        onClick={() => handleCardClick(index, position)}
+                        role="button"
+                        tabIndex={isCenter ? 0 : -1}
+                        aria-label={`${photo.alt} - ${isCenter ? "Buka Tampilan 3D" : "Pilih Foto"}`}
+                      >
+                        <div className="coverflow-card-frame">
+                          <div className="coverflow-card-img-wrap">
+                            <img
+                              src={photo.src}
+                              alt={photo.alt}
+                              className="coverflow-card-img"
+                              loading="lazy"
+                              draggable="false"
+                            />
+
+                            {/* Center Card Interactive Overlay */}
+                            {isCenter && (
+                              <div className="coverflow-card-center-overlay">
+                                <div className="coverflow-zoom-icon">
+                                  <svg
+                                    width="22"
+                                    height="22"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                                    <line x1="12" y1="22.08" x2="12" y2="12" />
+                                  </svg>
+                                </div>
+                                <span className="coverflow-view-hint">
+                                  Sentuh untuk Melihat 3D
+                                </span>
+                              </div>
+                            )}
+
+                            {/* Flank Card Overlay (Shading & Quick Chevron) */}
+                            {(isLeft || isRight) && (
+                              <div className="coverflow-card-flank-overlay">
+                                <span className="coverflow-flank-arrow">
+                                  {isLeft ? "‹" : "›"}
+                                </span>
+                              </div>
+                            )}
                           </div>
-                          <span className="gallery-view-hint">Sentuh untuk Melihat 3D</span>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                ))}
+                    );
+                  })}
+                </div>
+
+                {/* Right Navigation Arrow */}
+                <button
+                  type="button"
+                  className="coverflow-nav-arrow next"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    goToNextSlide();
+                  }}
+                  aria-label="Foto Selanjutnya"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Bottom Carousel Controls: Pagination Dots, Counter & Auto Badge */}
+              <div className="coverflow-bottom-bar">
+                <div className="coverflow-counter-badge">
+                  <span className="current-num">
+                    {String(activePhotoIndex + 1).padStart(2, "0")}
+                  </span>
+                  <span className="counter-sep">/</span>
+                  <span className="total-num">
+                    {String(galleryPhotos.length).padStart(2, "0")}
+                  </span>
+                </div>
+
+                {/* Pagination Dots */}
+                <div className="coverflow-dots">
+                  {galleryPhotos.map((p, idx) => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      className={`coverflow-dot ${idx === activePhotoIndex ? "is-active" : ""}`}
+                      onClick={() => goToSlide(idx)}
+                      aria-label={`Lihat foto ${idx + 1}`}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </section>

@@ -429,58 +429,21 @@
     transform: translateY(0);
 }
 
-.gallery-section .gallery-item {
+.gallery-section .gallery-coverflow-wrapper {
     opacity: 0;
-    filter: blur(3px);
+    transform: translateY(28px) scale(0.96);
+    filter: blur(4px);
     transition: 
-        opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.85s cubic-bezier(0.34, 1.25, 0.64, 1),
-        filter 0.8s ease;
+        opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.15s,
+        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s,
+        filter 0.85s ease 0.15s;
     will-change: opacity, transform, filter;
 }
 
-.gallery-section .gallery-item:nth-child(1) {
-    transform: translateY(32px) rotate(-2deg) scale(0.94);
-}
-
-.gallery-section .gallery-item:nth-child(2) {
-    transform: translateY(32px) rotate(2deg) scale(0.94);
-}
-
-.gallery-section .gallery-item:nth-child(3) {
-    transform: translateY(32px) rotate(1.5deg) scale(0.94);
-}
-
-.gallery-section .gallery-item:nth-child(4) {
-    transform: translateY(32px) rotate(-1.5deg) scale(0.94);
-}
-
-.gallery-section.visible-scroll .gallery-item:nth-child(1) {
+.gallery-section.visible-scroll .gallery-coverflow-wrapper {
     opacity: 1;
-    transform: translateY(0) rotate(0deg) scale(1);
+    transform: translateY(0) scale(1);
     filter: blur(0);
-    transition-delay: 0.12s;
-}
-
-.gallery-section.visible-scroll .gallery-item:nth-child(2) {
-    opacity: 1;
-    transform: translateY(0) rotate(0deg) scale(1);
-    filter: blur(0);
-    transition-delay: 0.22s;
-}
-
-.gallery-section.visible-scroll .gallery-item:nth-child(3) {
-    opacity: 1;
-    transform: translateY(0) rotate(0deg) scale(1);
-    filter: blur(0);
-    transition-delay: 0.32s;
-}
-
-.gallery-section.visible-scroll .gallery-item:nth-child(4) {
-    opacity: 1;
-    transform: translateY(0) rotate(0deg) scale(1);
-    filter: blur(0);
-    transition-delay: 0.42s;
 }
 
 /* 8. Buku Tamu / Guestbook: Cascade Komentar */
@@ -518,13 +481,8 @@
     .couple-section .bride-card {
         transform: translateY(26px) scale(0.96);
     }
-    .gallery-section .gallery-item:nth-child(1),
-    .gallery-section .gallery-item:nth-child(3) {
-        transform: translateY(22px) rotate(-1deg) scale(0.95);
-    }
-    .gallery-section .gallery-item:nth-child(2),
-    .gallery-section .gallery-item:nth-child(4) {
-        transform: translateY(22px) rotate(1deg) scale(0.95);
+    .gallery-section .gallery-coverflow-wrapper {
+        transform: translateY(20px) scale(0.96);
     }
 
     /* Di layar HP: batasi jumlah bunga gugur dan perkecil ukurannya agar tampilan bersih & tidak ramai */
@@ -565,7 +523,7 @@
     .rsvp-section .form-group,
     .rsvp-section .submit-btn,
     .gift-section .gift-icon-wrap,
-    .gallery-section .gallery-item,
+    .gallery-section .gallery-coverflow-wrapper,
     .guestbook-section .comment-card {
         transform: none !important;
         filter: none !important;
@@ -2211,6 +2169,7 @@
     text-align: center;
     width: 100%;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .gallery-header {
@@ -2237,97 +2196,339 @@
     font-style: italic;
 }
 
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    margin-top: 20px;
-}
+/* =========================================
+   GALERI FOTO: 3D COVERFLOW CAROUSEL (PLAYSTATION STYLE)
+========================================= */
 
-.gallery-item {
-    cursor: pointer;
-    position: relative;
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
-}
-
-.gallery-item:hover {
-    transform: translateY(-4px);
-}
-
-/* Bingkai Kotak Estetik, Konsisten, Tanpa Lengkungan Tumpul */
-.gallery-frame-outer {
-    background: #faf8f5;
-    border: 1.5px solid #ece3d3;
-    border-radius: 6px;
-    padding: 8px;
-    box-shadow: 0 4px 15px rgba(44, 37, 35, 0.06);
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-}
-
-.gallery-item:hover .gallery-frame-outer {
-    border-color: #c29b62;
-    box-shadow: 0 8px 24px rgba(194, 155, 98, 0.25);
-    background: #ffffff;
-}
-
-/* Foto Kotak Presisi 1:1 Konsisten */
-.gallery-img-wrapper {
+.gallery-coverflow-wrapper {
     position: relative;
     width: 100%;
-    aspect-ratio: 1 / 1;
+    max-width: 520px;
+    margin: 22px auto 14px auto;
+    perspective: 1100px;
+    perspective-origin: center 48%;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: pan-y;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Ambient glow di bawah kartu terpilih (PlayStation luxury aesthetic) */
+.coverflow-ambient-glow {
+    position: absolute;
+    width: 250px;
+    height: 70px;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse at center, rgba(194, 155, 98, 0.38) 0%, rgba(212, 175, 55, 0.15) 45%, transparent 75%);
+    filter: blur(14px);
+    pointer-events: none;
+    z-index: 2;
+    transition: opacity 0.5s ease;
+}
+
+/* Stage panggung 3D */
+.gallery-coverflow-stage {
+    position: relative;
+    width: 100%;
+    height: 330px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-style: preserve-3d;
+}
+
+/* Kartu Coverflow individual */
+.coverflow-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 216px;
+    height: 270px;
+    margin-left: -108px;
+    margin-top: -135px;
+    transition: 
+        transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.55s ease,
+        filter 0.55s ease,
+        box-shadow 0.55s ease,
+        visibility 0.55s ease;
+    will-change: transform, opacity, filter;
+    transform-style: preserve-3d;
+    cursor: pointer;
+}
+
+/* POSISI TENGAH (Pilihan Utama / Depan) */
+.coverflow-card.is-center {
+    transform: translate3d(0, 0, 50px) scale(1) rotateY(0deg);
+    opacity: 1;
+    z-index: 10;
+    filter: drop-shadow(0 14px 28px rgba(194, 155, 98, 0.32)) drop-shadow(0 6px 14px rgba(44, 37, 35, 0.12));
+    cursor: pointer;
+}
+
+.coverflow-card.is-center:hover {
+    transform: translate3d(0, -4px, 60px) scale(1.02) rotateY(0deg);
+}
+
+/* POSISI KIRI (Flank Kiri berputar miring 3D ke kanan) */
+.coverflow-card.is-left {
+    transform: translate3d(-64%, 0, -35px) scale(0.82) rotateY(24deg);
+    opacity: 0.55;
+    z-index: 5;
+    filter: drop-shadow(0 6px 14px rgba(44, 37, 35, 0.15)) brightness(0.88);
+}
+
+.coverflow-card.is-left:hover {
+    opacity: 0.85;
+    transform: translate3d(-62%, -2px, -15px) scale(0.85) rotateY(18deg);
+    filter: drop-shadow(0 8px 18px rgba(194, 155, 98, 0.25)) brightness(0.96);
+}
+
+/* POSISI KANAN (Flank Kanan berputar miring 3D ke kiri) */
+.coverflow-card.is-right {
+    transform: translate3d(64%, 0, -35px) scale(0.82) rotateY(-24deg);
+    opacity: 0.55;
+    z-index: 5;
+    filter: drop-shadow(0 6px 14px rgba(44, 37, 35, 0.15)) brightness(0.88);
+}
+
+.coverflow-card.is-right:hover {
+    opacity: 0.85;
+    transform: translate3d(62%, -2px, -15px) scale(0.85) rotateY(-18deg);
+    filter: drop-shadow(0 8px 18px rgba(194, 155, 98, 0.25)) brightness(0.96);
+}
+
+/* POSISI SEMBUNYI DI BELAKANG */
+.coverflow-card.is-hidden {
+    transform: translate3d(0, 0, -120px) scale(0.6) rotateY(0deg);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+    visibility: hidden;
+}
+
+/* Frame Kartu Estetik & Kokoh */
+.coverflow-card-frame {
+    width: 100%;
+    height: 100%;
+    background: #faf8f5;
+    border: 2px solid #ece3d3;
+    border-radius: 12px;
+    padding: 8px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 18px rgba(44, 37, 35, 0.08);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: border-color 0.35s ease, background 0.35s ease;
+}
+
+.coverflow-card.is-center .coverflow-card-frame {
+    border-color: #c29b62;
+    background: #ffffff;
+    box-shadow: 0 8px 24px rgba(194, 155, 98, 0.25);
+}
+
+.coverflow-card-img-wrap {
+    position: relative;
+    width: 100%;
+    flex: 1;
     overflow: hidden;
     background: #e8e0d0;
-    border-radius: 4px;
+    border-radius: 8px;
     border: 1px solid rgba(194, 155, 98, 0.25);
 }
 
-.gallery-img {
+.coverflow-card-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.gallery-item:hover .gallery-img {
-    transform: scale(1.08);
+.coverflow-card.is-center:hover .coverflow-card-img {
+    transform: scale(1.05);
 }
 
-.gallery-overlay {
+/* Center Card Hover Overlay */
+.coverflow-card-center-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(44, 37, 35, 0.35);
+    background: rgba(30, 24, 20, 0.36);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     opacity: 0;
     transition: opacity 0.3s ease;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
-.gallery-item:hover .gallery-overlay {
+.coverflow-card.is-center:hover .coverflow-card-center-overlay {
     opacity: 1;
 }
 
-.gallery-zoom-icon {
+.coverflow-zoom-icon {
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: rgba(194, 155, 98, 0.92);
+    background: rgba(194, 155, 98, 0.95);
     border: 1.5px solid #ffffff;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
     transform: scale(0.85);
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    color: #ffffff;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
 }
 
-.gallery-item:hover .gallery-zoom-icon {
+.coverflow-card.is-center:hover .coverflow-zoom-icon {
     transform: scale(1);
+}
+
+.coverflow-view-hint {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* Flank Card Overlay (Shading & Quick Chevron) */
+.coverflow-card-flank-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(30, 24, 20, 0.15) 0%, rgba(30, 24, 20, 0.45) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+}
+
+.coverflow-flank-arrow {
+    font-size: 2rem;
+    color: #ffffff;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.coverflow-card.is-left:hover .coverflow-flank-arrow,
+.coverflow-card.is-right:hover .coverflow-flank-arrow {
+    opacity: 0.9;
+    transform: scale(1.1);
+}
+
+/* Tombol Panah Navigasi Kiri & Kanan */
+.coverflow-nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.94);
+    border: 1.5px solid #d4af37;
+    color: #7d6032;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(44, 37, 35, 0.14);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 25;
+    outline: none;
+}
+
+.coverflow-nav-arrow.prev {
+    left: -4px;
+}
+
+.coverflow-nav-arrow.next {
+    right: -4px;
+}
+
+.coverflow-nav-arrow:hover {
+    background: #c29b62;
+    color: #ffffff;
+    border-color: #ffffff;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 18px rgba(194, 155, 98, 0.4);
+}
+
+.coverflow-nav-arrow:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+/* Bottom Bar: Dots, Counter, Auto Timer Badge */
+.coverflow-bottom-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding: 0 6px;
+}
+
+.coverflow-counter-badge {
+    font-family: var(--font-secondary, "Cinzel", Georgia, serif);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #5c4e40;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.coverflow-counter-badge .current-num {
+    color: #c29b62;
+    font-size: 1.05rem;
+}
+
+.coverflow-counter-badge .counter-sep {
+    color: #b5a999;
+    font-weight: 400;
+}
+
+.coverflow-counter-badge .total-num {
+    color: #8c7f70;
+}
+
+/* Pagination Dots */
+.coverflow-dots {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.coverflow-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #e0d5c1;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.coverflow-dot:hover {
+    background: #c29b62;
+}
+
+.coverflow-dot.is-active {
+    width: 24px;
+    border-radius: 6px;
+    background: #c29b62;
+    box-shadow: 0 2px 8px rgba(194, 155, 98, 0.4);
 }
 
 /* =========================================
@@ -3009,9 +3210,30 @@
     .address-details {
         padding: 16px 12px;
     }
-    .gallery-grid {
-        gap: 10px;
+    .gallery-coverflow-stage {
+        height: 270px;
     }
+    .coverflow-card {
+        width: 152px;
+        height: 192px;
+        margin-left: -76px;
+        margin-top: -96px;
+    }
+    .coverflow-card.is-center {
+        transform: translate3d(0, 0, 30px) scale(1) rotateY(0deg);
+    }
+    .coverflow-card.is-left {
+        transform: translate3d(-46%, 0, -20px) scale(0.78) rotateY(16deg);
+    }
+    .coverflow-card.is-right {
+        transform: translate3d(46%, 0, -20px) scale(0.78) rotateY(-16deg);
+    }
+    .coverflow-nav-arrow {
+        width: 32px;
+        height: 32px;
+    }
+    .coverflow-nav-arrow.prev { left: 2px; }
+    .coverflow-nav-arrow.next { right: 2px; }
 }
 
 /* ANIMASI ENTRY HERO SECTION */
@@ -3161,7 +3383,25 @@
     .gift-copy-btn-compact { font-size: 0.7rem; padding: 5px 10px; }
 
     /* Galeri */
-    .gallery-grid { gap: 10px; }
+    .gallery-coverflow-stage { height: 245px; }
+    .coverflow-card {
+        width: 134px;
+        height: 170px;
+        margin-left: -67px;
+        margin-top: -85px;
+    }
+    .coverflow-card.is-center {
+        transform: translate3d(0, 0, 24px) scale(1) rotateY(0deg);
+    }
+    .coverflow-card.is-left {
+        transform: translate3d(-44%, 0, -18px) scale(0.75) rotateY(14deg);
+    }
+    .coverflow-card.is-right {
+        transform: translate3d(44%, 0, -18px) scale(0.75) rotateY(-14deg);
+    }
+    .coverflow-nav-arrow { width: 28px; height: 28px; }
+    .coverflow-nav-arrow.prev { left: 0px; }
+    .coverflow-nav-arrow.next { right: 0px; }
     .gallery-tag { font-size: 0.68rem; }
     .gallery-subtitle { font-size: 0.76rem; }
     .gallery-view-hint { font-size: 0.65rem; }
@@ -3244,9 +3484,9 @@
         right: 24px;
     }
 
-    /* Gallery grid proporsional */
-    .gallery-grid {
-        gap: 16px;
+    /* Gallery coverflow proporsional */
+    .gallery-coverflow-stage {
+        height: 340px;
     }
 }
 

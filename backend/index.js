@@ -6,6 +6,7 @@ const { initDB } = require('./db/pool');
 const adminRoutes = require('./routes/admin');
 const guestsRoutes = require('./routes/guests');
 const rsvpRoutes = require('./routes/rsvp');
+const visitorsRoutes = require('./routes/visitors');
 
 // ==========================================
 // SETUP APP
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use('/api/admin', adminRoutes);
 app.use('/api/guests', guestsRoutes);
 app.use('/api/rsvp', rsvpRoutes);
+app.use('/api/visitors', visitorsRoutes);
 
 // ==========================================
 // INIT DATABASE & JALANKAN SERVER
