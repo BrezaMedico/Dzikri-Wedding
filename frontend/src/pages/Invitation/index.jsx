@@ -1167,14 +1167,14 @@ export default function Invitation() {
                 Wedding Gift
               </h2>
               <p className="gift-teaser-text">
-                Doa restu Anda merupakan karunia terindah bagi kami. Namun apabila Bapak/Ibu/Saudara/i hendak memberikan tanda kasih, kami menyediakannya melalui dompet digital berikut:
+                Doa restu Anda merupakan karunia terindah bagi kami. Namun apabila Bapak/Ibu/Saudara/i hendak memberikan tanda kasih, kami menyediakannya melalui transfer rekening bank maupun kado fisik berikut:
               </p>
 
               <button
                 className={`gift-toggle-btn ${showGiftDetails ? "is-open" : ""}`}
                 onClick={() => setShowGiftDetails((prev) => !prev)}
               >
-                {showGiftDetails ? "Tutup Pilihan Rekening" : "Kirim Tanda Kasih"}
+                {showGiftDetails ? "Tutup Pilihan Tanda Kasih" : "Kirim Tanda Kasih"}
                 <svg
                   className="gift-toggle-arrow"
                   width="14"
@@ -1288,6 +1288,34 @@ export default function Invitation() {
                       </div>
                     );
                   })()}
+
+                  {/* Gift Kado Fisik (Simple & Elegan) */}
+                  <div className="gift-physical-card-simple">
+                    <div className="gift-physical-simple-header">
+                      <div className="gift-physical-header-title">
+                        <span className="gift-physical-badge">Gift Kado Fisik</span>
+                        <p className="gift-physical-receiver">
+                          Penerima: <strong>Rumah Kak Resa / Ibu H Iom</strong>
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        className={`gift-copy-btn-compact ${copiedTarget === "physical_gift" ? "copied" : ""}`}
+                        onClick={() =>
+                          handleCopyText(
+                            "Penerima: Rumah Kak Resa / Ibu H Iom\nAlamat: Gang Masjid Ataqwa, RT.2/RW.1, Kampung Cemplang, KAB. BOGOR, CIBUNGBULANG, JAWA BARAT, ID, 16630",
+                            "physical_gift"
+                          )
+                        }
+                      >
+                        {copiedTarget === "physical_gift" ? "Disalin ✓" : "Salin Alamat"}
+                      </button>
+                    </div>
+
+                    <p className="gift-physical-address-simple">
+                      Gang Masjid Ataqwa, RT.2/RW.1, Kampung Cemplang, KAB. BOGOR, CIBUNGBULANG, JAWA BARAT, ID, 16630
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

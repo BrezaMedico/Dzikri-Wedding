@@ -2154,6 +2154,61 @@
     font-weight: 700;
 }
 
+/* Card Kado Fisik (Simple & Minimalis) */
+.gift-physical-card-simple {
+    background: #faf8f5;
+    border: 1px solid #ece3d3;
+    border-radius: 14px;
+    padding: 14px 16px;
+    text-align: left;
+    margin-top: 14px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.01);
+    position: relative;
+    z-index: 10;
+    animation: cardReveal 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.gift-physical-simple-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.gift-physical-header-title {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.gift-physical-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #8c7a6b;
+}
+
+.gift-physical-receiver {
+    font-size: 0.88rem;
+    color: #4a3f35;
+    margin: 0;
+}
+
+.gift-physical-receiver strong {
+    color: #2c2523;
+}
+
+.gift-physical-address-simple {
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: #6b5e53;
+    margin: 0;
+    padding-top: 8px;
+    border-top: 1px dashed #ece3d3;
+}
+
 /* =========================================
    GALERI FOTO PERNIKAHAN (4 SLOT KOTAK KONSISTEN & LIGHTBOX)
 ========================================= */
