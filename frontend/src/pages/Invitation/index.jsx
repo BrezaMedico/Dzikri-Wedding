@@ -756,8 +756,7 @@ export default function Invitation() {
                 {/* Bagian Ayat QS. Ar-Rum: 21 (Rapi, Anggun & Bersih) */}
                 <div className="quote-block">
                   <div className="quote-badge">QS. Ar-Rum : 21</div>
-                  <h2 className="section-title quote-title">Holy Matrimony</h2>
-                  
+
                   <div
                     className={`quote-text-wrapper ${revealedWordCount > 0 ? "is-active" : ""}`}
                     ref={quoteRef}
@@ -823,7 +822,7 @@ export default function Invitation() {
                           title={`Instagram ${coupleInfo.groom.fullName}`}
                         >
                           <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
-                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
                           </svg>
                           <span>@{coupleInfo.groom.instagram}</span>
                         </a>
@@ -872,7 +871,7 @@ export default function Invitation() {
                           title={`Instagram ${coupleInfo.bride.fullName}`}
                         >
                           <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
-                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
                           </svg>
                           <span>@{coupleInfo.bride.instagram}</span>
                         </a>
@@ -883,826 +882,826 @@ export default function Invitation() {
               </div>
             </section>
 
-          {/* 2. FLIP CLOCK (Hitung mundur) */}
-          <section className="section-padding countdown-section reveal-on-scroll">
-            <div className="save-the-date-container">
-              <img
-                src="/images/flower-branch.png"
-                className="flower-decor top-right"
-                alt="Bunga Hiasan"
-              />
+            {/* 2. FLIP CLOCK (Hitung mundur) */}
+            <section className="section-padding countdown-section reveal-on-scroll">
+              <div className="save-the-date-container">
+                <img
+                  src="/images/flower-branch.png"
+                  className="flower-decor top-right"
+                  alt="Bunga Hiasan"
+                />
 
-              <div className="flip-clock-card">
-                <h2 className="section-title">Save The Date</h2>
-                <div className="date-highlight">Sabtu, 26 September 2026</div>
-                <div className="flip-clock-board">
-                  {["days", "hours", "minutes", "seconds"].map((unit) => (
-                    <div key={unit} className="flip-group">
-                      <div className="flip-pair">
-                        <FlipDigit digit={timeLeft[unit][0]} />
-                        <FlipDigit digit={timeLeft[unit][1]} />
-                      </div>
-                      <div className="clock-label">
-                        {unit === "days"
-                          ? "HARI"
-                          : unit === "hours"
-                            ? "JAM"
-                            : unit === "minutes"
-                              ? "MENIT"
-                              : "DETIK"}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Jadwal Rangkaian Acara (Akad & Resepsi) */}
-                <div className="event-schedule-container">
-                  <div className="schedule-divider">
-                    <div className="schedule-divider-line"></div>
-                    <div className="schedule-divider-diamond">✦</div>
-                    <div className="schedule-divider-line"></div>
-                  </div>
-
-                  <div className="schedule-grid">
-                    {/* Akad Nikah */}
-                    <div className="schedule-item">
-                      <div className="schedule-badge">Akad Nikah</div>
-                      <div className="schedule-time">
-                        <svg className="schedule-clock-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <circle cx="12" cy="12" r="10" />
-                          <polyline points="12 6 12 12 16 14" />
-                        </svg>
-                        <span>09:00 WIB - Selesai</span>
-                      </div>
-                    </div>
-
-                    {/* Resepsi Pernikahan */}
-                    <div className="schedule-item">
-                      <div className="schedule-badge">Wedding Reception</div>
-                      <div className="schedule-time">
-                        <svg className="schedule-clock-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <circle cx="12" cy="12" r="10" />
-                          <polyline points="12 6 12 12 16 14" />
-                        </svg>
-                        <span>11:00 WIB - 17:00 WIB</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <img
-                src="/images/flower-branch.png"
-                className="flower-decor bottom-left"
-                alt="Bunga Hiasan"
-              />
-            </div>
-          </section>
-          {/* 4. LOKASI ACARA (Maps) */}
-          <section className="section-padding location-section reveal-on-scroll">
-            <div className="location-card">
-              <h2 className="section-title" style={{ marginTop: "20px" }}>
-                Wedding Venue
-              </h2>
-              <div className="map-responsive">
-                <iframe
-                  title="Google Maps Location"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.6429368232684!2d106.62292377499327!3d-6.566671893426604!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69d9b63b711aeb%3A0x8088d78f2ceee1b7!2sSaung%20Abah%20BTN!5e0!3m2!1sid!2sid!4v1789050302248!5m2!1sid!2sid"
-                  width="100%"
-                  height="260"
-                  style={{ border: 0 }}
-                  allowFullScreen=""
-                  loading="lazy"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                ></iframe>
-              </div>
-              <div className="address-details">
-                <h3>Saung Abah BTN</h3>
-                <p>
-                  Cibeber I, Kec. Leuwiliang, Kabupaten Bogor, Jawa Barat
-                </p>
-                <a
-                  href="https://maps.google.com/?q=Saung+Abah+BTN"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="open-map-btn"
-                  title="Buka Rute di Google Maps"
-                >
-                  <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                  </svg>
-                  <span>Buka Google Maps</span>
-                </a>
-              </div>
-            </div>
-          </section>
-
-          {/* 5. KISAH KASIH KAMI */}
-          <section className="section-padding timeline-section">
-            <h2 className="section-title reveal-on-scroll">Our Love Story</h2>
-            <div className="timeline-container">
-              <div className="timeline-item reveal-on-scroll timeline-anim">
-                <div className="timeline-dot"></div>
-                <div className="timeline-content">
-                  <div className="timeline-date">2024</div>
-                  <h3 className="timeline-title">First Meeting</h3>
-                  <p className="timeline-text">
-                    Berawal dari tempat kerja yang sama, benih kebersamaan dan
-                    ketulusan mulai tumbuh di antara kami berdua.
-                  </p>
-                </div>
-              </div>
-
-              <div className="timeline-item reveal-on-scroll timeline-anim">
-                <div className="timeline-dot"></div>
-                <div className="timeline-content">
-                  <div className="timeline-date">DESEMBER 2025</div>
-                  <h3 className="timeline-title">Engagement</h3>
-                  <p className="timeline-text">
-                    Dengan restu dan doa tulus kedua orang tua, kami mengikat
-                    komitmen saling setia melalui pertukaran cincin.
-                  </p>
-                </div>
-              </div>
-
-              <div className="timeline-item reveal-on-scroll timeline-anim">
-                <div className="timeline-dot"></div>
-                <div className="timeline-content">
-                  <div className="timeline-date">AGUSTUS 2026</div>
-                  <h3 className="timeline-title">The Proposal</h3>
-                  <p className="timeline-text">
-                    Pertemuan hangat antar kedua keluarga besar untuk memantapkan
-                    langkah menuju gerbang pernikahan yang suci.
-                  </p>
-                </div>
-              </div>
-
-              <div className="timeline-item reveal-on-scroll timeline-anim">
-                <div className="timeline-dot"></div>
-                <div className="timeline-content">
-                  <div className="timeline-date">26 SEPTEMBER 2026</div>
-                  <h3 className="timeline-title">The Wedding Day</h3>
-                  <p className="timeline-text">
-                    Insyaallah pada hari Sabtu, 26 September 2026, kami mengikat janji suci pernikahan untuk mengarungi bahtera rumah tangga yang sakinah, mawaddah, warahmah.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* SISA KONTEN SAMA DI BAWAHNYA */}
-
-          {/* FORM RSVP */}
-          <section className="section-padding rsvp-section reveal-on-scroll">
-            <div className="modern-rsvp-card">
-              <div className="rsvp-header">
-                <span className="rsvp-tag">RSVP</span>
-                <h2>RSVP &amp; Attendance</h2>
-                <p>
-                  Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu.
-                </p>
-              </div>
-
-              <form className="rsvp-form" onSubmit={handleSubmitRSVP}>
-                <div className="form-group">
-                  <label>Nama Lengkap</label>
-                  <input
-                    type="text"
-                    className="form-input"
-                    value={rsvpName}
-                    onChange={(e) => setRsvpName(e.target.value)}
-                    placeholder="Tuliskan nama lengkap Anda..."
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Konfirmasi Kehadiran</label>
-                  <div className="radio-pills">
-                    <button
-                      type="button"
-                      className={`pill-btn ${attendance === "Hadir" ? "active" : ""}`}
-                      onClick={() => setAttendance("Hadir")}
-                    >
-                      ✓ Hadir
-                    </button>
-                    <button
-                      type="button"
-                      className={`pill-btn ${attendance === "Tidak Bisa Hadir" ? "active" : ""}`}
-                      onClick={() => setAttendance("Tidak Bisa Hadir")}
-                    >
-                      ✕ Berhalangan Hadir
-                    </button>
-                  </div>
-                </div>
-
-                {attendance === "Hadir" && (
-                  <div className="form-group">
-                    <label>Jumlah Tamu yang Hadir</label>
-                    <div className="counter-container">
-                      <button
-                        type="button"
-                        className="counter-btn"
-                        onClick={() =>
-                          setGuestCount(Math.max(1, guestCount - 1))
-                        }
-                        aria-label="Kurangi jumlah tamu"
-                      >
-                        −
-                      </button>
-                      <span className="counter-value">{guestCount} Orang</span>
-                      <button
-                        type="button"
-                        className="counter-btn"
-                        onClick={() => setGuestCount(guestCount + 1)}
-                        aria-label="Tambah jumlah tamu"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                <div className="form-group">
-                  <label>Doa Restu &amp; Pesan Ucapan</label>
-                  <textarea
-                    className="form-input textarea"
-                    rows="3"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Tuliskan untaian doa dan ucapan selamat untuk kedua mempelai..."
-                    required
-                  ></textarea>
-                </div>
-                <button
-                  type="submit"
-                  className="submit-btn"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Mengirimkan Konfirmasi..." : "Kirim Konfirmasi & Doa"}
-                </button>
-              </form>
-            </div>
-          </section>
-
-          {/* WEDDING GIFT */}
-          <section className="section-padding gift-section reveal-on-scroll">
-            <div className="gift-card-mini">
-              <div className="gift-icon-wrap">
-                <svg
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                >
-                  <rect x="3" y="8" width="18" height="13" rx="1.5" />
-                  <path d="M3 12h18" />
-                  <path d="M12 8v13" />
-                  <path d="M12 8c-1.8 0-3.2-1.4-3.2-3.2S10.2 1.6 12 3.4c1.8-1.8 3.2-1.4 3.2 1.4S13.8 8 12 8Z" />
-                </svg>
-              </div>
-
-              <h2 className="section-title" style={{ marginBottom: "6px" }}>
-                Wedding Gift
-              </h2>
-              <p className="gift-teaser-text">
-                Doa restu Anda merupakan karunia terindah bagi kami. Namun apabila Bapak/Ibu/Saudara/i hendak memberikan tanda kasih, kami menyediakannya melalui transfer rekening bank maupun kado fisik berikut:
-              </p>
-
-              <button
-                className={`gift-toggle-btn ${showGiftDetails ? "is-open" : ""}`}
-                onClick={() => setShowGiftDetails((prev) => !prev)}
-              >
-                {showGiftDetails ? "Tutup Pilihan Tanda Kasih" : "Kirim Tanda Kasih"}
-                <svg
-                  className="gift-toggle-arrow"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M6 9l6 6 6-6" />
-                </svg>
-              </button>
-
-              <div
-                className={`gift-accounts-reveal ${showGiftDetails ? "open" : ""}`}
-              >
-                <div className="gift-accounts-inner">
-                  {/* Custom Dropdown Selector */}
-                  <div className="gift-dropdown-container">
-                    <label className="gift-dropdown-label">Pilih Rekening Tujuan:</label>
-                    <div className="gift-dropdown">
-                      <button
-                        type="button"
-                        className={`gift-dropdown-trigger ${isDropdownOpen ? "active" : ""}`}
-                        onClick={() => setIsDropdownOpen((prev) => !prev)}
-                      >
-                        <span className="gift-dropdown-selected-wrap">
-                          {selectedAccountId ? (
-                            <>
-                              <img
-                                src={giftAccounts.find((acc) => acc.id === selectedAccountId)?.logo}
-                                alt="Logo"
-                                className="gift-item-logo-mini"
-                              />
-                              <span className="gift-dropdown-selected-text">
-                                {giftAccounts.find((acc) => acc.id === selectedAccountId)?.label}
-                              </span>
-                            </>
-                          ) : (
-                            <span className="gift-dropdown-selected-text">
-                              — Pilih Rekening Bank —
-                            </span>
-                          )}
-                        </span>
-                        <svg
-                          className={`gift-dropdown-arrow ${isDropdownOpen ? "is-open" : ""}`}
-                          width="12"
-                          height="12"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.5"
-                        >
-                          <path d="M6 9l6 6 6-6" />
-                        </svg>
-                      </button>
-
-                      {isDropdownOpen && (
-                        <div className="gift-dropdown-menu">
-                          {giftAccounts.map((acc) => (
-                            <button
-                              key={acc.id}
-                              type="button"
-                              className={`gift-dropdown-item ${selectedAccountId === acc.id ? "selected" : ""}`}
-                              onClick={() => {
-                                setSelectedAccountId(acc.id);
-                                setIsDropdownOpen(false);
-                                setCopiedTarget(""); // reset status salin
-                              }}
-                            >
-                              <img src={acc.logo} alt="BSI" className="gift-item-logo-mini" />
-                              <span className="gift-item-label">{acc.label}</span>
-                            </button>
-                          ))}
+                <div className="flip-clock-card">
+                  <h2 className="section-title">Save The Date</h2>
+                  <div className="date-highlight">Sabtu, 26 September 2026</div>
+                  <div className="flip-clock-board">
+                    {["days", "hours", "minutes", "seconds"].map((unit) => (
+                      <div key={unit} className="flip-group">
+                        <div className="flip-pair">
+                          <FlipDigit digit={timeLeft[unit][0]} />
+                          <FlipDigit digit={timeLeft[unit][1]} />
                         </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Detil Rekening yang Terpilih */}
-                  {selectedAccountId && (() => {
-                    const activeAcc = giftAccounts.find((acc) => acc.id === selectedAccountId);
-                    if (!activeAcc) return null;
-                    return (
-                      <div className="gift-detail-card" key={activeAcc.id}>
-                        <div className="gift-detail-header">
-                          <div className="gift-detail-header-left">
-                            <img src={activeAcc.logo} alt="BSI Logo" className="gift-bank-logo" />
-                            <span className="gift-detail-bank">{activeAcc.bankName}</span>
-                          </div>
+                        <div className="clock-label">
+                          {unit === "days"
+                            ? "HARI"
+                            : unit === "hours"
+                              ? "JAM"
+                              : unit === "minutes"
+                                ? "MENIT"
+                                : "DETIK"}
                         </div>
-                        
-                        <div className="gift-detail-body">
-                          <p className="gift-detail-label">Nomor Rekening:</p>
-                          <div className="gift-number-row">
-                            <span className="gift-detail-value number-style">
-                              {activeAcc.accountNumber}
-                            </span>
-                            <button
-                              type="button"
-                              className={`gift-copy-btn-compact ${copiedTarget === activeAcc.id ? "copied" : ""}`}
-                              onClick={() => handleCopyText(activeAcc.accountNumber, activeAcc.id)}
-                            >
-                              {copiedTarget === activeAcc.id ? "Berhasil Disalin ✓" : "Salin No. Rekening"}
-                            </button>
-                          </div>
-                          <p className="gift-detail-holder">
-                            Atas Nama: <strong className="holder-name">{activeAcc.accountHolder}</strong>
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  })()}
-
-                  {/* Pembatas Halus & Elegan */}
-                  <div className="gift-or-divider">
-                    <span>Atau Kirim Kado Fisik</span>
-                  </div>
-
-                  {/* Kartu Kado Fisik yang Rapi & Proporsional */}
-                  <div className="gift-physical-card-v2">
-                    <div className="gift-physical-v2-header">
-                      <div className="gift-physical-v2-icon">
-                        <svg
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <rect x="3" y="8" width="18" height="13" rx="1.5" />
-                          <path d="M3 12h18" />
-                          <path d="M12 8v13" />
-                          <path d="M12 8c-1.8 0-3.2-1.4-3.2-3.2S10.2 1.6 12 3.4c1.8-1.8 3.2-1.4 3.2 1.4S13.8 8 12 8Z" />
-                        </svg>
-                      </div>
-                      <div className="gift-physical-v2-info">
-                        <h4 className="gift-physical-v2-title">Gift Kado Fisik</h4>
-                        <p className="gift-physical-v2-receiver">
-                          Penerima: <strong>Rumah Kak Resa / Ibu H Iom</strong>
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="gift-physical-v2-body">
-                      <div className="gift-physical-v2-address-box">
-                        <p className="gift-physical-v2-address-text">
-                          Gang Masjid Ataqwa, RT.2/RW.1, Kampung Cemplang, KAB. BOGOR, CIBUNGBULANG, JAWA BARAT, ID, 16630
-                        </p>
-                      </div>
-                      <div className="gift-physical-v2-action">
-                        <button
-                          type="button"
-                          className={`gift-copy-btn-compact ${copiedTarget === "physical_gift" ? "copied" : ""}`}
-                          onClick={() =>
-                            handleCopyText(
-                              "Penerima: Rumah Kak Resa / Ibu H Iom\nAlamat: Gang Masjid Ataqwa, RT.2/RW.1, Kampung Cemplang, KAB. BOGOR, CIBUNGBULANG, JAWA BARAT, ID, 16630",
-                              "physical_gift"
-                            )
-                          }
-                        >
-                          {copiedTarget === "physical_gift" ? "✓ Alamat Berhasil Disalin" : "Salin Alamat Lengkap"}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* GALERI FOTO (4 SLOT FOTO AESTHETIC DENGAN LIGHTBOX) */}
-          <section className="section-padding gallery-section reveal-on-scroll">
-            <div className="gallery-section-card">
-              <div className="gallery-header">
-                <span className="gallery-tag">Our Moments</span>
-                <h2 className="section-title">Moments &amp; Memories</h2>
-                <p className="gallery-subtitle">
-                  Mengabadikan kehangatan, ketulusan, dan langkah awal perjalanan cinta kami berdua
-                </p>
-              </div>
-
-              {/* 3D Coverflow Carousel Stage (PlayStation Style) */}
-              <div
-                className="gallery-coverflow-wrapper"
-                onMouseEnter={() => setIsCarouselHovered(true)}
-                onMouseLeave={() => setIsCarouselHovered(false)}
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUp}
-              >
-                {/* Ambient Pedestal Glow */}
-                <div className="coverflow-ambient-glow" />
-
-                {/* Left Navigation Arrow */}
-                <button
-                  type="button"
-                  className="coverflow-nav-arrow prev"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    goToPrevSlide();
-                  }}
-                  aria-label="Foto Sebelumnya"
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polyline points="15 18 9 12 15 6" />
-                  </svg>
-                </button>
-
-                {/* 3D Cards Track */}
-                <div className="gallery-coverflow-stage">
-                  {galleryPhotos.map((photo, index) => {
-                    const position = getSlidePosition(index);
-                    const isCenter = position === "center";
-                    const isLeft = position === "left";
-                    const isRight = position === "right";
-
-                    return (
-                      <div
-                        key={photo.id}
-                        className={`coverflow-card is-${position}`}
-                        onClick={() => handleCardClick(index, position)}
-                        role="button"
-                        tabIndex={isCenter ? 0 : -1}
-                        aria-label={`${photo.alt} - ${isCenter ? "Buka Tampilan 3D" : "Pilih Foto"}`}
-                      >
-                        <div className="coverflow-card-frame">
-                          <div className="coverflow-card-img-wrap">
-                            <img
-                              src={photo.src}
-                              alt={photo.alt}
-                              className="coverflow-card-img"
-                              loading="lazy"
-                              draggable="false"
-                            />
-
-                            {/* Center Card Interactive Overlay */}
-                            {isCenter && (
-                              <div className="coverflow-card-center-overlay">
-                                <div className="coverflow-zoom-icon">
-                                  <svg
-                                    width="22"
-                                    height="22"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  >
-                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                                    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                                    <line x1="12" y1="22.08" x2="12" y2="12" />
-                                  </svg>
-                                </div>
-                                <span className="coverflow-view-hint">
-                                  Sentuh untuk Melihat 3D
-                                </span>
-                              </div>
-                            )}
-
-                            {/* Flank Card Overlay (Shading & Quick Chevron) */}
-                            {(isLeft || isRight) && (
-                              <div className="coverflow-card-flank-overlay">
-                                <span className="coverflow-flank-arrow">
-                                  {isLeft ? "‹" : "›"}
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Right Navigation Arrow */}
-                <button
-                  type="button"
-                  className="coverflow-nav-arrow next"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    goToNextSlide();
-                  }}
-                  aria-label="Foto Selanjutnya"
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polyline points="9 18 15 12 9 6" />
-                  </svg>
-                </button>
-              </div>
-
-              {/* Bottom Carousel Controls: Pagination Dots, Counter & Auto Badge */}
-              <div className="coverflow-bottom-bar">
-                <div className="coverflow-counter-badge">
-                  <span className="current-num">
-                    {String(activePhotoIndex + 1).padStart(2, "0")}
-                  </span>
-                  <span className="counter-sep">/</span>
-                  <span className="total-num">
-                    {String(galleryPhotos.length).padStart(2, "0")}
-                  </span>
-                </div>
-
-                {/* Pagination Dots */}
-                <div className="coverflow-dots">
-                  {galleryPhotos.map((p, idx) => (
-                    <button
-                      key={p.id}
-                      type="button"
-                      className={`coverflow-dot ${idx === activePhotoIndex ? "is-active" : ""}`}
-                      onClick={() => goToSlide(idx)}
-                      aria-label={`Lihat foto ${idx + 1}`}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* 3D PARALLAX PHOTO CARD MODAL */}
-          {selectedPhotoIndex !== null && (
-            <div
-              className="gallery-3d-backdrop"
-              onClick={handleClose3DCard}
-            >
-              {/* Top Navigation Bar with Prominent Back Button */}
-              <div
-                className="gallery-3d-topbar"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <button
-                  type="button"
-                  className="gallery-3d-back-btn"
-                  onClick={handleClose3DCard}
-                  title="Kembali ke Halaman Undangan"
-                >
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="19" y1="12" x2="5" y2="12"></line>
-                    <polyline points="12 19 5 12 12 5"></polyline>
-                  </svg>
-                  <span>Kembali</span>
-                </button>
-
-                <div className="gallery-3d-hint-badge">
-                  <span className="hint-hand-icon">🖐️</span>
-                  <span>Sentuh &amp; geser foto untuk memutar 3D</span>
-                </div>
-
-                <div className="gallery-3d-top-actions">
-                  <button
-                    type="button"
-                    className="gallery-3d-btn-pill flip-btn"
-                    onClick={handleFlipCard}
-                    title="Balik Sisi Depan / Belakang"
-                  >
-                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
-                    </svg>
-                    <span>Balik Kartu</span>
-                  </button>
-                  <button
-                    type="button"
-                    className="gallery-3d-close-btn"
-                    onClick={handleClose3DCard}
-                    title="Tutup (Esc)"
-                  >
-                    ✕
-                  </button>
-                </div>
-              </div>
-
-              {/* 3D Interactive Stage */}
-              <div
-                className="gallery-3d-stage"
-                onClick={(e) => e.stopPropagation()}
-                onPointerDown={handlePointerDown}
-                onPointerMove={handlePointerMove}
-                onPointerUp={handlePointerUp}
-                onPointerCancel={handlePointerUp}
-              >
-                <div
-                  className={`gallery-3d-card ${isDragging ? "is-dragging" : ""}`}
-                  style={{
-                    transform: `rotateX(${rotX}deg) rotateY(${rotY}deg)`,
-                  }}
-                >
-                  {/* SISI DEPAN (FOTO PERNIKAHAN DENGAN BINGKAI KERTAS ARTISTIK) */}
-                  <div className="gallery-card-face card-front">
-                    <div className="card-front-inner">
-                      <div className="card-photo-box">
-                        <img
-                          src={galleryPhotos[selectedPhotoIndex].src}
-                          alt={galleryPhotos[selectedPhotoIndex].alt}
-                          className="card-photo-img"
-                          draggable="false"
-                        />
-                        <div className="card-sheen-highlight"></div>
-                      </div>
-                      <div className="card-front-caption">
-                        <div className="card-caption-decor">✦ • ✤ • ✦</div>
-                        <div className="card-caption-names">M. Dzikri Fauzan &amp; Resa Erviana</div>
-                        <div className="card-caption-sub">The Wedding • 26 September 2026</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* SISI BELAKANG: PUTIH POLOS DENGAN TULISAN NAMA KEDUA MEMPELAI */}
-                  <div className="gallery-card-face card-back">
-                    <div className="card-back-plain">
-                      <span className="card-back-subtitle">The Wedding of</span>
-                      <h3 className="card-back-couple-names">
-                        <span className="name-line">M. Dzikri Fauzan</span>
-                        <span className="card-back-amp">&amp;</span>
-                        <span className="name-line">Resa Erviana</span>
-                      </h3>
-                      <div className="card-back-divider">
-                        <span className="card-back-divider-line"></span>
-                        <span className="card-back-divider-diamond">✦</span>
-                        <span className="card-back-divider-line"></span>
-                      </div>
-                      <div className="card-back-date">26 September 2026</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom Photo Navigation & Counter */}
-              <div
-                className="gallery-3d-bottom-controls"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <button
-                  type="button"
-                  className="gallery-3d-nav-btn prev"
-                  onClick={handlePrevPhoto}
-                  title="Foto Sebelumnya (←)"
-                >
-                  ‹
-                </button>
-
-                <div className="gallery-3d-counter">
-                  {selectedPhotoIndex + 1} / {galleryPhotos.length}
-                </div>
-
-                <button
-                  type="button"
-                  className="gallery-3d-nav-btn next"
-                  onClick={handleNextPhoto}
-                  title="Foto Selanjutnya (→)"
-                >
-                  ›
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* SECTION KOMENTAR DENGAN GRADASI FADE */}
-          {comments.length > 0 && (
-            <section className="section-padding guestbook-section reveal-on-scroll">
-              <div className="guestbook-container">
-                <h2 className="section-title">Wishes &amp; Prayers</h2>
-                <p className="guestbook-subtitle">
-                  {comments.length} Doa dan ucapan tulus dari keluarga &amp; sahabat
-                </p>
-
-                <div
-                  className={`comments-wrapper ${!showAllComments && comments.length > 3 ? "has-gradient" : ""}`}
-                >
-                  <div className="comments-list">
-                    {displayedComments.map((comment) => (
-                      <div key={comment.id} className="comment-card">
-                        <div className="comment-header">
-                          <div className="comment-avatar">
-                            {comment.name.charAt(0).toUpperCase()}
-                          </div>
-                          <div className="comment-info">
-                            <h4>{comment.name}</h4>
-                            <span
-                              className={`attendance-badge ${comment.attendance === "Hadir" ? "hadir" : "absen"}`}
-                            >
-                              {comment.attendance === "Hadir"
-                                ? "✓ Hadir"
-                                : "✕ Berhalangan Hadir"}
-                            </span>
-                          </div>
-                        </div>
-                        <p className="comment-message">"{comment.message}"</p>
                       </div>
                     ))}
                   </div>
+
+                  {/* Jadwal Rangkaian Acara (Akad & Resepsi) */}
+                  <div className="event-schedule-container">
+                    <div className="schedule-divider">
+                      <div className="schedule-divider-line"></div>
+                      <div className="schedule-divider-diamond">✦</div>
+                      <div className="schedule-divider-line"></div>
+                    </div>
+
+                    <div className="schedule-grid">
+                      {/* Akad Nikah */}
+                      <div className="schedule-item">
+                        <div className="schedule-badge">Akad Nikah</div>
+                        <div className="schedule-time">
+                          <svg className="schedule-clock-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                          </svg>
+                          <span>09:00 WIB - Selesai</span>
+                        </div>
+                      </div>
+
+                      {/* Resepsi Pernikahan */}
+                      <div className="schedule-item">
+                        <div className="schedule-badge">Wedding Reception</div>
+                        <div className="schedule-time">
+                          <svg className="schedule-clock-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                          </svg>
+                          <span>11:00 WIB - 17:00 WIB</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                {comments.length > 3 && (
-                  <button
-                    className="show-more-btn"
-                    onClick={() => setShowAllComments(!showAllComments)}
-                  >
-                    {showAllComments ? "Tampilkan Lebih Sedikit" : "Lihat Semua Ucapan"}
-                  </button>
-                )}
+                <img
+                  src="/images/flower-branch.png"
+                  className="flower-decor bottom-left"
+                  alt="Bunga Hiasan"
+                />
               </div>
             </section>
-          )}
+            {/* 4. LOKASI ACARA (Maps) */}
+            <section className="section-padding location-section reveal-on-scroll">
+              <div className="location-card">
+                <h2 className="section-title" style={{ marginTop: "20px" }}>
+                  Wedding Venue
+                </h2>
+                <div className="map-responsive">
+                  <iframe
+                    title="Google Maps Location"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.6429368232684!2d106.62292377499327!3d-6.566671893426604!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69d9b63b711aeb%3A0x8088d78f2ceee1b7!2sSaung%20Abah%20BTN!5e0!3m2!1sid!2sid!4v1789050302248!5m2!1sid!2sid"
+                    width="100%"
+                    height="260"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                  ></iframe>
+                </div>
+                <div className="address-details">
+                  <h3>Saung Abah BTN</h3>
+                  <p>
+                    Cibeber I, Kec. Leuwiliang, Kabupaten Bogor, Jawa Barat
+                  </p>
+                  <a
+                    href="https://maps.google.com/?q=Saung+Abah+BTN"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="open-map-btn"
+                    title="Buka Rute di Google Maps"
+                  >
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                    </svg>
+                    <span>Buka Google Maps</span>
+                  </a>
+                </div>
+              </div>
+            </section>
+
+            {/* 5. KISAH KASIH KAMI */}
+            <section className="section-padding timeline-section">
+              <h2 className="section-title reveal-on-scroll">Our Love Story</h2>
+              <div className="timeline-container">
+                <div className="timeline-item reveal-on-scroll timeline-anim">
+                  <div className="timeline-dot"></div>
+                  <div className="timeline-content">
+                    <div className="timeline-date">2024</div>
+                    <h3 className="timeline-title">First Meeting</h3>
+                    <p className="timeline-text">
+                      Berawal dari tempat kerja yang sama, benih kebersamaan dan
+                      ketulusan mulai tumbuh di antara kami berdua.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="timeline-item reveal-on-scroll timeline-anim">
+                  <div className="timeline-dot"></div>
+                  <div className="timeline-content">
+                    <div className="timeline-date">DESEMBER 2025</div>
+                    <h3 className="timeline-title">Engagement</h3>
+                    <p className="timeline-text">
+                      Dengan restu dan doa tulus kedua orang tua, kami mengikat
+                      komitmen saling setia melalui pertukaran cincin.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="timeline-item reveal-on-scroll timeline-anim">
+                  <div className="timeline-dot"></div>
+                  <div className="timeline-content">
+                    <div className="timeline-date">AGUSTUS 2026</div>
+                    <h3 className="timeline-title">The Proposal</h3>
+                    <p className="timeline-text">
+                      Pertemuan hangat antar kedua keluarga besar untuk memantapkan
+                      langkah menuju gerbang pernikahan yang suci.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="timeline-item reveal-on-scroll timeline-anim">
+                  <div className="timeline-dot"></div>
+                  <div className="timeline-content">
+                    <div className="timeline-date">26 SEPTEMBER 2026</div>
+                    <h3 className="timeline-title">The Wedding Day</h3>
+                    <p className="timeline-text">
+                      Insyaallah pada hari Sabtu, 26 September 2026, kami mengikat janji suci pernikahan untuk mengarungi bahtera rumah tangga yang sakinah, mawaddah, warahmah.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* SISA KONTEN SAMA DI BAWAHNYA */}
+
+            {/* FORM RSVP */}
+            <section className="section-padding rsvp-section reveal-on-scroll">
+              <div className="modern-rsvp-card">
+                <div className="rsvp-header">
+                  <span className="rsvp-tag">RSVP</span>
+                  <h2>RSVP &amp; Attendance</h2>
+                  <p>
+                    Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu.
+                  </p>
+                </div>
+
+                <form className="rsvp-form" onSubmit={handleSubmitRSVP}>
+                  <div className="form-group">
+                    <label>Nama Lengkap</label>
+                    <input
+                      type="text"
+                      className="form-input"
+                      value={rsvpName}
+                      onChange={(e) => setRsvpName(e.target.value)}
+                      placeholder="Tuliskan nama lengkap Anda..."
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Konfirmasi Kehadiran</label>
+                    <div className="radio-pills">
+                      <button
+                        type="button"
+                        className={`pill-btn ${attendance === "Hadir" ? "active" : ""}`}
+                        onClick={() => setAttendance("Hadir")}
+                      >
+                        ✓ Hadir
+                      </button>
+                      <button
+                        type="button"
+                        className={`pill-btn ${attendance === "Tidak Bisa Hadir" ? "active" : ""}`}
+                        onClick={() => setAttendance("Tidak Bisa Hadir")}
+                      >
+                        ✕ Berhalangan Hadir
+                      </button>
+                    </div>
+                  </div>
+
+                  {attendance === "Hadir" && (
+                    <div className="form-group">
+                      <label>Jumlah Tamu yang Hadir</label>
+                      <div className="counter-container">
+                        <button
+                          type="button"
+                          className="counter-btn"
+                          onClick={() =>
+                            setGuestCount(Math.max(1, guestCount - 1))
+                          }
+                          aria-label="Kurangi jumlah tamu"
+                        >
+                          −
+                        </button>
+                        <span className="counter-value">{guestCount} Orang</span>
+                        <button
+                          type="button"
+                          className="counter-btn"
+                          onClick={() => setGuestCount(guestCount + 1)}
+                          aria-label="Tambah jumlah tamu"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="form-group">
+                    <label>Doa Restu &amp; Pesan Ucapan</label>
+                    <textarea
+                      className="form-input textarea"
+                      rows="3"
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      placeholder="Tuliskan untaian doa dan ucapan selamat untuk kedua mempelai..."
+                      required
+                    ></textarea>
+                  </div>
+                  <button
+                    type="submit"
+                    className="submit-btn"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Mengirimkan Konfirmasi..." : "Kirim Konfirmasi & Doa"}
+                  </button>
+                </form>
+              </div>
+            </section>
+
+            {/* WEDDING GIFT */}
+            <section className="section-padding gift-section reveal-on-scroll">
+              <div className="gift-card-mini">
+                <div className="gift-icon-wrap">
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                  >
+                    <rect x="3" y="8" width="18" height="13" rx="1.5" />
+                    <path d="M3 12h18" />
+                    <path d="M12 8v13" />
+                    <path d="M12 8c-1.8 0-3.2-1.4-3.2-3.2S10.2 1.6 12 3.4c1.8-1.8 3.2-1.4 3.2 1.4S13.8 8 12 8Z" />
+                  </svg>
+                </div>
+
+                <h2 className="section-title" style={{ marginBottom: "6px" }}>
+                  Wedding Gift
+                </h2>
+                <p className="gift-teaser-text">
+                  Doa restu Anda merupakan karunia terindah bagi kami. Namun apabila Bapak/Ibu/Saudara/i hendak memberikan tanda kasih, kami menyediakannya melalui transfer rekening bank maupun kado fisik berikut:
+                </p>
+
+                <button
+                  className={`gift-toggle-btn ${showGiftDetails ? "is-open" : ""}`}
+                  onClick={() => setShowGiftDetails((prev) => !prev)}
+                >
+                  {showGiftDetails ? "Tutup Pilihan Tanda Kasih" : "Kirim Tanda Kasih"}
+                  <svg
+                    className="gift-toggle-arrow"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M6 9l6 6 6-6" />
+                  </svg>
+                </button>
+
+                <div
+                  className={`gift-accounts-reveal ${showGiftDetails ? "open" : ""}`}
+                >
+                  <div className="gift-accounts-inner">
+                    {/* Custom Dropdown Selector */}
+                    <div className="gift-dropdown-container">
+                      <label className="gift-dropdown-label">Pilih Rekening Tujuan:</label>
+                      <div className="gift-dropdown">
+                        <button
+                          type="button"
+                          className={`gift-dropdown-trigger ${isDropdownOpen ? "active" : ""}`}
+                          onClick={() => setIsDropdownOpen((prev) => !prev)}
+                        >
+                          <span className="gift-dropdown-selected-wrap">
+                            {selectedAccountId ? (
+                              <>
+                                <img
+                                  src={giftAccounts.find((acc) => acc.id === selectedAccountId)?.logo}
+                                  alt="Logo"
+                                  className="gift-item-logo-mini"
+                                />
+                                <span className="gift-dropdown-selected-text">
+                                  {giftAccounts.find((acc) => acc.id === selectedAccountId)?.label}
+                                </span>
+                              </>
+                            ) : (
+                              <span className="gift-dropdown-selected-text">
+                                — Pilih Rekening Bank —
+                              </span>
+                            )}
+                          </span>
+                          <svg
+                            className={`gift-dropdown-arrow ${isDropdownOpen ? "is-open" : ""}`}
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.5"
+                          >
+                            <path d="M6 9l6 6 6-6" />
+                          </svg>
+                        </button>
+
+                        {isDropdownOpen && (
+                          <div className="gift-dropdown-menu">
+                            {giftAccounts.map((acc) => (
+                              <button
+                                key={acc.id}
+                                type="button"
+                                className={`gift-dropdown-item ${selectedAccountId === acc.id ? "selected" : ""}`}
+                                onClick={() => {
+                                  setSelectedAccountId(acc.id);
+                                  setIsDropdownOpen(false);
+                                  setCopiedTarget(""); // reset status salin
+                                }}
+                              >
+                                <img src={acc.logo} alt="BSI" className="gift-item-logo-mini" />
+                                <span className="gift-item-label">{acc.label}</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Detil Rekening yang Terpilih */}
+                    {selectedAccountId && (() => {
+                      const activeAcc = giftAccounts.find((acc) => acc.id === selectedAccountId);
+                      if (!activeAcc) return null;
+                      return (
+                        <div className="gift-detail-card" key={activeAcc.id}>
+                          <div className="gift-detail-header">
+                            <div className="gift-detail-header-left">
+                              <img src={activeAcc.logo} alt="BSI Logo" className="gift-bank-logo" />
+                              <span className="gift-detail-bank">{activeAcc.bankName}</span>
+                            </div>
+                          </div>
+
+                          <div className="gift-detail-body">
+                            <p className="gift-detail-label">Nomor Rekening:</p>
+                            <div className="gift-number-row">
+                              <span className="gift-detail-value number-style">
+                                {activeAcc.accountNumber}
+                              </span>
+                              <button
+                                type="button"
+                                className={`gift-copy-btn-compact ${copiedTarget === activeAcc.id ? "copied" : ""}`}
+                                onClick={() => handleCopyText(activeAcc.accountNumber, activeAcc.id)}
+                              >
+                                {copiedTarget === activeAcc.id ? "Berhasil Disalin ✓" : "Salin No. Rekening"}
+                              </button>
+                            </div>
+                            <p className="gift-detail-holder">
+                              Atas Nama: <strong className="holder-name">{activeAcc.accountHolder}</strong>
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })()}
+
+                    {/* Pembatas Halus & Elegan */}
+                    <div className="gift-or-divider">
+                      <span>Atau Kirim Kado Fisik</span>
+                    </div>
+
+                    {/* Kartu Kado Fisik yang Rapi & Proporsional */}
+                    <div className="gift-physical-card-v2">
+                      <div className="gift-physical-v2-header">
+                        <div className="gift-physical-v2-icon">
+                          <svg
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <rect x="3" y="8" width="18" height="13" rx="1.5" />
+                            <path d="M3 12h18" />
+                            <path d="M12 8v13" />
+                            <path d="M12 8c-1.8 0-3.2-1.4-3.2-3.2S10.2 1.6 12 3.4c1.8-1.8 3.2-1.4 3.2 1.4S13.8 8 12 8Z" />
+                          </svg>
+                        </div>
+                        <div className="gift-physical-v2-info">
+                          <h4 className="gift-physical-v2-title">Gift Kado Fisik</h4>
+                          <p className="gift-physical-v2-receiver">
+                            Penerima: <strong>Rumah Kak Resa / Ibu H Iom</strong>
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="gift-physical-v2-body">
+                        <div className="gift-physical-v2-address-box">
+                          <p className="gift-physical-v2-address-text">
+                            Gang Masjid Ataqwa, RT.2/RW.1, Kampung Cemplang, KAB. BOGOR, CIBUNGBULANG, JAWA BARAT, ID, 16630
+                          </p>
+                        </div>
+                        <div className="gift-physical-v2-action">
+                          <button
+                            type="button"
+                            className={`gift-copy-btn-compact ${copiedTarget === "physical_gift" ? "copied" : ""}`}
+                            onClick={() =>
+                              handleCopyText(
+                                "Penerima: Rumah Kak Resa / Ibu H Iom\nAlamat: Gang Masjid Ataqwa, RT.2/RW.1, Kampung Cemplang, KAB. BOGOR, CIBUNGBULANG, JAWA BARAT, ID, 16630",
+                                "physical_gift"
+                              )
+                            }
+                          >
+                            {copiedTarget === "physical_gift" ? "✓ Alamat Berhasil Disalin" : "Salin Alamat Lengkap"}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* GALERI FOTO (4 SLOT FOTO AESTHETIC DENGAN LIGHTBOX) */}
+            <section className="section-padding gallery-section reveal-on-scroll">
+              <div className="gallery-section-card">
+                <div className="gallery-header">
+                  <span className="gallery-tag">Our Moments</span>
+                  <h2 className="section-title">Moments &amp; Memories</h2>
+                  <p className="gallery-subtitle">
+                    Mengabadikan kehangatan, ketulusan, dan langkah awal perjalanan cinta kami berdua
+                  </p>
+                </div>
+
+                {/* 3D Coverflow Carousel Stage (PlayStation Style) */}
+                <div
+                  className="gallery-coverflow-wrapper"
+                  onMouseEnter={() => setIsCarouselHovered(true)}
+                  onMouseLeave={() => setIsCarouselHovered(false)}
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
+                  onMouseDown={handleMouseDown}
+                  onMouseMove={handleMouseMove}
+                  onMouseUp={handleMouseUp}
+                >
+                  {/* Ambient Pedestal Glow */}
+                  <div className="coverflow-ambient-glow" />
+
+                  {/* Left Navigation Arrow */}
+                  <button
+                    type="button"
+                    className="coverflow-nav-arrow prev"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      goToPrevSlide();
+                    }}
+                    aria-label="Foto Sebelumnya"
+                  >
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="15 18 9 12 15 6" />
+                    </svg>
+                  </button>
+
+                  {/* 3D Cards Track */}
+                  <div className="gallery-coverflow-stage">
+                    {galleryPhotos.map((photo, index) => {
+                      const position = getSlidePosition(index);
+                      const isCenter = position === "center";
+                      const isLeft = position === "left";
+                      const isRight = position === "right";
+
+                      return (
+                        <div
+                          key={photo.id}
+                          className={`coverflow-card is-${position}`}
+                          onClick={() => handleCardClick(index, position)}
+                          role="button"
+                          tabIndex={isCenter ? 0 : -1}
+                          aria-label={`${photo.alt} - ${isCenter ? "Buka Tampilan 3D" : "Pilih Foto"}`}
+                        >
+                          <div className="coverflow-card-frame">
+                            <div className="coverflow-card-img-wrap">
+                              <img
+                                src={photo.src}
+                                alt={photo.alt}
+                                className="coverflow-card-img"
+                                loading="lazy"
+                                draggable="false"
+                              />
+
+                              {/* Center Card Interactive Overlay */}
+                              {isCenter && (
+                                <div className="coverflow-card-center-overlay">
+                                  <div className="coverflow-zoom-icon">
+                                    <svg
+                                      width="22"
+                                      height="22"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    >
+                                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                      <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                                      <line x1="12" y1="22.08" x2="12" y2="12" />
+                                    </svg>
+                                  </div>
+                                  <span className="coverflow-view-hint">
+                                    Sentuh untuk Melihat 3D
+                                  </span>
+                                </div>
+                              )}
+
+                              {/* Flank Card Overlay (Shading & Quick Chevron) */}
+                              {(isLeft || isRight) && (
+                                <div className="coverflow-card-flank-overlay">
+                                  <span className="coverflow-flank-arrow">
+                                    {isLeft ? "‹" : "›"}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Right Navigation Arrow */}
+                  <button
+                    type="button"
+                    className="coverflow-nav-arrow next"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      goToNextSlide();
+                    }}
+                    aria-label="Foto Selanjutnya"
+                  >
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Bottom Carousel Controls: Pagination Dots, Counter & Auto Badge */}
+                <div className="coverflow-bottom-bar">
+                  <div className="coverflow-counter-badge">
+                    <span className="current-num">
+                      {String(activePhotoIndex + 1).padStart(2, "0")}
+                    </span>
+                    <span className="counter-sep">/</span>
+                    <span className="total-num">
+                      {String(galleryPhotos.length).padStart(2, "0")}
+                    </span>
+                  </div>
+
+                  {/* Pagination Dots */}
+                  <div className="coverflow-dots">
+                    {galleryPhotos.map((p, idx) => (
+                      <button
+                        key={p.id}
+                        type="button"
+                        className={`coverflow-dot ${idx === activePhotoIndex ? "is-active" : ""}`}
+                        onClick={() => goToSlide(idx)}
+                        aria-label={`Lihat foto ${idx + 1}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* 3D PARALLAX PHOTO CARD MODAL */}
+            {selectedPhotoIndex !== null && (
+              <div
+                className="gallery-3d-backdrop"
+                onClick={handleClose3DCard}
+              >
+                {/* Top Navigation Bar with Prominent Back Button */}
+                <div
+                  className="gallery-3d-topbar"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    type="button"
+                    className="gallery-3d-back-btn"
+                    onClick={handleClose3DCard}
+                    title="Kembali ke Halaman Undangan"
+                  >
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="19" y1="12" x2="5" y2="12"></line>
+                      <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    <span>Kembali</span>
+                  </button>
+
+                  <div className="gallery-3d-hint-badge">
+                    <span className="hint-hand-icon">🖐️</span>
+                    <span>Sentuh &amp; geser foto untuk memutar 3D</span>
+                  </div>
+
+                  <div className="gallery-3d-top-actions">
+                    <button
+                      type="button"
+                      className="gallery-3d-btn-pill flip-btn"
+                      onClick={handleFlipCard}
+                      title="Balik Sisi Depan / Belakang"
+                    >
+                      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
+                      </svg>
+                      <span>Balik Kartu</span>
+                    </button>
+                    <button
+                      type="button"
+                      className="gallery-3d-close-btn"
+                      onClick={handleClose3DCard}
+                      title="Tutup (Esc)"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+
+                {/* 3D Interactive Stage */}
+                <div
+                  className="gallery-3d-stage"
+                  onClick={(e) => e.stopPropagation()}
+                  onPointerDown={handlePointerDown}
+                  onPointerMove={handlePointerMove}
+                  onPointerUp={handlePointerUp}
+                  onPointerCancel={handlePointerUp}
+                >
+                  <div
+                    className={`gallery-3d-card ${isDragging ? "is-dragging" : ""}`}
+                    style={{
+                      transform: `rotateX(${rotX}deg) rotateY(${rotY}deg)`,
+                    }}
+                  >
+                    {/* SISI DEPAN (FOTO PERNIKAHAN DENGAN BINGKAI KERTAS ARTISTIK) */}
+                    <div className="gallery-card-face card-front">
+                      <div className="card-front-inner">
+                        <div className="card-photo-box">
+                          <img
+                            src={galleryPhotos[selectedPhotoIndex].src}
+                            alt={galleryPhotos[selectedPhotoIndex].alt}
+                            className="card-photo-img"
+                            draggable="false"
+                          />
+                          <div className="card-sheen-highlight"></div>
+                        </div>
+                        <div className="card-front-caption">
+                          <div className="card-caption-decor">✦ • ✤ • ✦</div>
+                          <div className="card-caption-names">M. Dzikri Fauzan &amp; Resa Erviana</div>
+                          <div className="card-caption-sub">The Wedding • 26 September 2026</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* SISI BELAKANG: PUTIH POLOS DENGAN TULISAN NAMA KEDUA MEMPELAI */}
+                    <div className="gallery-card-face card-back">
+                      <div className="card-back-plain">
+                        <span className="card-back-subtitle">The Wedding of</span>
+                        <h3 className="card-back-couple-names">
+                          <span className="name-line">M. Dzikri Fauzan</span>
+                          <span className="card-back-amp">&amp;</span>
+                          <span className="name-line">Resa Erviana</span>
+                        </h3>
+                        <div className="card-back-divider">
+                          <span className="card-back-divider-line"></span>
+                          <span className="card-back-divider-diamond">✦</span>
+                          <span className="card-back-divider-line"></span>
+                        </div>
+                        <div className="card-back-date">26 September 2026</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom Photo Navigation & Counter */}
+                <div
+                  className="gallery-3d-bottom-controls"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    type="button"
+                    className="gallery-3d-nav-btn prev"
+                    onClick={handlePrevPhoto}
+                    title="Foto Sebelumnya (←)"
+                  >
+                    ‹
+                  </button>
+
+                  <div className="gallery-3d-counter">
+                    {selectedPhotoIndex + 1} / {galleryPhotos.length}
+                  </div>
+
+                  <button
+                    type="button"
+                    className="gallery-3d-nav-btn next"
+                    onClick={handleNextPhoto}
+                    title="Foto Selanjutnya (→)"
+                  >
+                    ›
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* SECTION KOMENTAR DENGAN GRADASI FADE */}
+            {comments.length > 0 && (
+              <section className="section-padding guestbook-section reveal-on-scroll">
+                <div className="guestbook-container">
+                  <h2 className="section-title">Wishes &amp; Prayers</h2>
+                  <p className="guestbook-subtitle">
+                    {comments.length} Doa dan ucapan tulus dari keluarga &amp; sahabat
+                  </p>
+
+                  <div
+                    className={`comments-wrapper ${!showAllComments && comments.length > 3 ? "has-gradient" : ""}`}
+                  >
+                    <div className="comments-list">
+                      {displayedComments.map((comment) => (
+                        <div key={comment.id} className="comment-card">
+                          <div className="comment-header">
+                            <div className="comment-avatar">
+                              {comment.name.charAt(0).toUpperCase()}
+                            </div>
+                            <div className="comment-info">
+                              <h4>{comment.name}</h4>
+                              <span
+                                className={`attendance-badge ${comment.attendance === "Hadir" ? "hadir" : "absen"}`}
+                              >
+                                {comment.attendance === "Hadir"
+                                  ? "✓ Hadir"
+                                  : "✕ Berhalangan Hadir"}
+                              </span>
+                            </div>
+                          </div>
+                          <p className="comment-message">"{comment.message}"</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {comments.length > 3 && (
+                    <button
+                      className="show-more-btn"
+                      onClick={() => setShowAllComments(!showAllComments)}
+                    >
+                      {showAllComments ? "Tampilkan Lebih Sedikit" : "Lihat Semua Ucapan"}
+                    </button>
+                  )}
+                </div>
+              </section>
+            )}
 
           </div>
 
