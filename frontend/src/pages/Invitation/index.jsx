@@ -1006,8 +1006,7 @@ export default function Invitation() {
                     <div className="timeline-date">2024</div>
                     <h3 className="timeline-title">First Meeting</h3>
                     <p className="timeline-text">
-                      Berawal dari tempat kerja yang sama, benih kebersamaan dan
-                      ketulusan mulai tumbuh di antara kami berdua.
+                      Berawal dari tempat kerja yang sama, pertemuan sederhana tersebut menjadi awal mula tumbuhnya rasa saling memahami di antara kami.
                     </p>
                   </div>
                 </div>
@@ -1015,11 +1014,10 @@ export default function Invitation() {
                 <div className="timeline-item reveal-on-scroll timeline-anim">
                   <div className="timeline-dot"></div>
                   <div className="timeline-content">
-                    <div className="timeline-date">DESEMBER 2025</div>
-                    <h3 className="timeline-title">Engagement</h3>
+                    <div className="timeline-date">DECEMBER 2025</div>
+                    <h3 className="timeline-title">Meeting of Two Families</h3>
                     <p className="timeline-text">
-                      Dengan restu dan doa tulus kedua orang tua, kami mengikat
-                      komitmen saling setia melalui pertukaran cincin.
+                      Pertemuan hangat kedua keluarga menjadi langkah awal untuk menyatukan niat baik serta merajut restu bersama.
                     </p>
                   </div>
                 </div>
@@ -1027,11 +1025,10 @@ export default function Invitation() {
                 <div className="timeline-item reveal-on-scroll timeline-anim">
                   <div className="timeline-dot"></div>
                   <div className="timeline-content">
-                    <div className="timeline-date">AGUSTUS 2026</div>
-                    <h3 className="timeline-title">The Proposal</h3>
+                    <div className="timeline-date">25 AUGUST 2026</div>
+                    <h3 className="timeline-title">The Engagement</h3>
                     <p className="timeline-text">
-                      Pertemuan hangat antar kedua keluarga besar untuk memantapkan
-                      langkah menuju gerbang pernikahan yang suci.
+                      Diringi doa tulus orang tua dan keluarga, kami meneguhkan komitmen untuk melangkah ke jenjang yang lebih suci.
                     </p>
                   </div>
                 </div>
@@ -1042,7 +1039,7 @@ export default function Invitation() {
                     <div className="timeline-date">26 SEPTEMBER 2026</div>
                     <h3 className="timeline-title">The Wedding Day</h3>
                     <p className="timeline-text">
-                      Insyaallah pada hari Sabtu, 26 September 2026, kami mengikat janji suci pernikahan untuk mengarungi bahtera rumah tangga yang sakinah, mawaddah, warahmah.
+                      Insyaallah, pada hari Sabtu, 26 September 2026, kami mengikat janji suci untuk memulai lembaran baru kehidupan bersama, membangun keluarga yang sakinah, mawaddah, warahmah.
                     </p>
                   </div>
                 </div>
