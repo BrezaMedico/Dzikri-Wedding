@@ -448,7 +448,7 @@ export default function Invitation() {
 
   const displayedComments = showAllComments
     ? sortedComments
-    : sortedComments.slice(0, 4);
+    : sortedComments.slice(0, 3);
 
   // 2. Logika Countdown Timer
   useEffect(() => {

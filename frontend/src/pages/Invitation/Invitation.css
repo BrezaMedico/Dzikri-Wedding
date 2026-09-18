@@ -455,22 +455,25 @@
         transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.guestbook-section.visible-scroll .comment-card:nth-child(1) {
+.guestbook-section.visible-scroll .comment-card {
     opacity: 1;
     transform: translateY(0) scale(1);
+}
+
+.guestbook-section.visible-scroll .comment-card:nth-child(1) {
     transition-delay: 0.14s;
 }
 
 .guestbook-section.visible-scroll .comment-card:nth-child(2) {
-    opacity: 1;
-    transform: translateY(0) scale(1);
     transition-delay: 0.24s;
 }
 
 .guestbook-section.visible-scroll .comment-card:nth-child(3) {
-    opacity: 1;
-    transform: translateY(0) scale(1);
     transition-delay: 0.34s;
+}
+
+.guestbook-section.visible-scroll .comment-card:nth-child(n+4) {
+    transition-delay: 0.05s;
 }
 
 /* Media Query Mobile: Menjaga Kestabilan Layout HP agar tidak ada pergeseran tepi */
