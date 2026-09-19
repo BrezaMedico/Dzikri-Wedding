@@ -452,7 +452,7 @@ export default function Invitation() {
 
   // 2. Logika Countdown Timer
   useEffect(() => {
-    const targetDate = new Date("2026-09-26T09:00:00").getTime();
+    const targetDate = new Date("2026-09-26T07:00:00").getTime();
     const interval = setInterval(() => {
       const now = new Date().getTime();
       const diff = targetDate - now;
@@ -931,7 +931,7 @@ export default function Invitation() {
                             <circle cx="12" cy="12" r="10" />
                             <polyline points="12 6 12 12 16 14" />
                           </svg>
-                          <span>09:00 WIB - Selesai</span>
+                          <span>07:00 WIB - Selesai</span>
                         </div>
                       </div>
 
